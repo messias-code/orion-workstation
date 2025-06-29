@@ -1,0 +1,26 @@
+# Este arquivo define listas padrão de pacotes.
+#
+# Variáveis:
+#   essential_packages:
+#     Uma lista de pacotes essenciais necessários para o funcionamento básico do sistema e desenvolvimento.
+#   optional_packages:
+#     Uma lista de pacotes adicionais que fornecem funcionalidades estendidas,
+#     como LaTeX e ferramentas de conversão de documentos. Não são estritamente necessários,
+#     mas podem ser úteis para determinados fluxos de trabalho.
+essential_packages:
+  - git
+  - curl
+  - wget
+  - neovim
+  - zsh
+  - dconf-cli
+  - python3-pip
+  - gnupg
+  - apt-transport-https
+  - ca-certificates
+
+optional_packages:
+  - texlive
+  - texlive-latex-extra
+  - texlive-xetex
+  - pandoc
