@@ -1,0 +1,10 @@
+---
+# =================================================================================
+# VARIÁVEIS DE CONFIGURAÇÃO - (true/false) para personalizar a instalação
+# =================================================================================
+
+setup:
+  # --- Atualização e aprimoramento do sistema operacional ---
+  update_system: true  # Atualizar e aprimorar o sistema operacional
+
+...
