@@ -1,0 +1,13 @@
+# Esta tarefa atualiza e aprimora o sistema operacional utilizando o gerenciador de pacotes APT.
+# - Atualiza o cache dos repositórios de pacotes.
+# - Realiza uma atualização completa do sistema (dist-upgrade).
+# - A execução ocorre apenas se a variável 'setup.update_system' estiver definida como verdadeira.
+---
+- name: Atualizar e aprimorar o sistema operacional
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: dist
+  when: setup.update_system
+
+...
