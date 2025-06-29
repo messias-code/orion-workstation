@@ -1,0 +1,19 @@
+---
+# =============================================================================
+# PLAYBOOK: Configuração Automatizada de Ambiente WSL2 Ubuntu
+# =============================================================================
+# Descrição:
+#   Este playbook realiza a configuração modular de um ambiente de
+#   desenvolvimento no WSL2 Ubuntu usando roles.
+#
+# Autor: Ihan Messias Nascimento dos Santos
+# Email: messias.devops@gmail.com
+# Linkedin: https://www.linkedin.com/in/ihanmessias/
+# =============================================================================
+
+- name: ORION WORKSTATION
+  hosts: localhost
+  connection: local
+
+  roles:
+    - role: update_system
