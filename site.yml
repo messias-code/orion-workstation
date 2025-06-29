@@ -7,7 +7,7 @@
 #   desenvolvimento no WSL2 Ubuntu usando roles.
 #
 # Autor: Ihan Messias Nascimento dos Santos
-# Email: messias.devops@gmail.com
+# Email: codeverso.academy@gmail.com
 # Linkedin: https://www.linkedin.com/in/ihanmessias/
 # =============================================================================
 
@@ -17,3 +17,6 @@
 
   roles:
     - role: update_system
+    - role: packages
+
+...
