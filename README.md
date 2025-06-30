@@ -207,29 +207,32 @@ Após a execução:
 
 ## 🔄 Desfazendo as Alterações
 
-Se você precisar remover todas as configurações e ferramentas instaladas pelo playbook, siga os passos abaixo:
+Caso precise reverter as configurações aplicadas pelo playbook, utilize o script de rollback fornecido no projeto. Ele tentará desfazer todas as alterações realizadas durante a instalação, independentemente de quais componentes foram instalados originalmente.
 
-1. Primeiro, mude para o shell bash para garantir que o processo de desinstalação ocorra corretamente:
-
-```bash
-bash
-```
-
-2. Execute o script de reversão: `(em desenvolvimento)`
+### 1. Execute o playbook de reversão
 
 ```bash
-bash rollback.sh
+ansible-playbook rollback.yml --ask-become-pass
 ```
+
+> **Nota:** O rollback executa a remoção de todos os componentes gerenciados pelo playbook, mesmo que alguns não tenham sido instalados. Isso não causa problemas, pois o Ansible ignora etapas de remoção para itens ausentes.
+
+### 2. Reinicie o terminal
+
+Após a execução do rollback, reinicie o terminal para garantir que todas as alterações sejam aplicadas corretamente.
+
+Se necessário, revise o arquivo `rollback.yml` para personalizar etapas específicas de reversão conforme seu ambiente.
 
 ## 🔍 Variáveis do Sistema
 
 O Ansible utiliza "facts" para coletar informações do sistema. As principais variáveis utilizadas neste playbook são:
 
-| Variável | Comando para Verificar | Descrição |
-|----------|------------------------|-----------|
-| `ansible_env.USER` | `whoami` ou `echo $USER` | Nome do usuário atual |
-| `ansible_user_id` | `id -u` | ID do usuário atual |
-| `ansible_distribution_release` | `lsb_release -cs` | Nome da versão do Ubuntu |
+| Variável                   | Comando para Verificar         | Descrição                       |
+|----------------------------|-------------------------------|---------------------------------|
+| `ansible_env.USER`         | `whoami` ou `echo $USER`      | Nome do usuário atual           |
+| `ansible_user_id`          | `id -u`                       | ID do usuário atual             |
+| `ansible_distribution_release` | `lsb_release -cs`          | Nome da versão do Ubuntu        |
+| `ansible_env.SHELL`        | `echo $SHELL`                 | Caminho do shell padrão do usuário |
 
 ## 📝 Licença
 
