@@ -52,7 +52,7 @@ A documentação detalha cada funcionalidade, pré-requisitos e instruções par
 Este projeto está em constante evolução para oferecer um ambiente DevOps cada vez mais completo. Ao longo de 2025, novas ferramentas e configurações serão integradas. Confira as etapas planejadas e em andamento:
 
 - [x] Atualização e Upgrade do Sistema Operacional
-- [ ] Instalação de utilitários: Instalação de pacotes essenciais e opcionais
+- [x] Instalação de utilitários: Instalação de pacotes essenciais e opcionais
 - [ ] Terminal Moderno: Instalação e Customização com Oh-My-ZSH, Powerlevel10k e Plugins
 - [ ] Containerização: Docker Engine e Docker Compose v2
 - [ ] Orquestração e Ferramentas Kubernetes: `kubectl`, `minikube`, `helm`, `k9s`
@@ -72,7 +72,7 @@ O playbook automatiza as seguintes configurações e instalações essenciais pa
     - Atualização dos repositórios e pacotes
     - Upgrade de segurança e limpeza de dependências
 
-2. **Instalação de utilitários** _(em desenvolvimento)_
+2. **Instalação de utilitários**
     - Instalação de pacotes essenciais e opcionais para o ambiente de desenvolvimento
 
 3. **Terminal moderno** _(em desenvolvimento)_
