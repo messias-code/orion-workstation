@@ -1,7 +1,7 @@
 # 🌌💻⚙️ Orion Workstation on WSL2
 
 <p align="center">
-   <img src="https://github.com/user-attachments/assets/13caef7e-657a-4c5f-8d98-fc366ac0f39e" alt="codeverso-academy" width="450">
+    <img src="assets/Orion-Workstation-Project.jpg" alt="orion-workstation" width="550" height="450">
 </p>
 
 > Automatização para configuração de ambiente de desenvolvimento no WSL2 Ubuntu, utilizando Ansible para agilizar e padronizar a instalação de ferramentas e configurações essenciais para profissionais DevOps.
@@ -52,7 +52,7 @@ A documentação detalha cada funcionalidade, pré-requisitos e instruções par
 Este projeto está em constante evolução para oferecer um ambiente DevOps cada vez mais completo. Ao longo de 2025, novas ferramentas e configurações serão integradas. Confira as etapas planejadas e em andamento:
 
 - [x] Atualização e Upgrade do Sistema Operacional
-- [x] Instalação de utilitários: Instalação de pacotes essenciais e opcionais
+- [ ] Instalação de utilitários: Instalação de pacotes essenciais e opcionais
 - [ ] Terminal Moderno: Instalação e Customização com Oh-My-ZSH, Powerlevel10k e Plugins
 - [ ] Containerização: Docker Engine e Docker Compose v2
 - [ ] Orquestração e Ferramentas Kubernetes: `kubectl`, `minikube`, `helm`, `k9s`
@@ -72,7 +72,7 @@ O playbook automatiza as seguintes configurações e instalações essenciais pa
     - Atualização dos repositórios e pacotes
     - Upgrade de segurança e limpeza de dependências
 
-2. **Instalação de utilitários**
+2. **Instalação de utilitários** _(em desenvolvimento)_
     - Instalação de pacotes essenciais e opcionais para o ambiente de desenvolvimento
 
 3. **Terminal moderno** _(em desenvolvimento)_
@@ -235,10 +235,27 @@ O Ansible utiliza "facts" para coletar informações do sistema. As principais v
 
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-## 🤝 Contato Profissional
-Para suporte ou questões relacionadas ao projeto, entre em contato através dos seguintes canais:
+## 🌐 Redes & Contato
 
-[![LinkedIn Badge](https://img.shields.io/static/v1?style=for-the-badge&message=LinkedIn&color=0A66C2&logo=LinkedIn&logoColor=FFFFFF&label=)](https://www.linkedin.com/in/ihanmessias/) [![Instagram Badge](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/messias.code)
+Fique à vontade para acompanhar o projeto, tirar dúvidas ou trocar ideias nas redes abaixo:
 
-<p align="center">✉ Email: codeverso.academy@gmail.com</p>
+<p align="center">
+    <a href="https://www.linkedin.com/in/ihanmessias/">
+        <img src="https://img.shields.io/badge/LinkedIn-ihanmessias-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Ihan Messias">
+    </a>
+    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=codeverso.academy@gmail.com" target="_blank">
+        <img src="https://img.shields.io/badge/Email-codeverso.academy@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email CodeVerso Academy">
+    </a>
+    <a href="https://www.instagram.com/messias.code">
+        <img src="https://img.shields.io/badge/Instagram-messias.code-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram Messias Code">
+    </a>
+    <a href="https://www.youtube.com/@codeversoacademy">
+        <img src="https://img.shields.io/badge/YouTube-CodeVerso%20Academy-red?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube CodeVerso Academy">
+    </a>
+</p>
+
+<p align="center">
+    <img src="assets/CodeVerso-Academy.jpg" alt="codeverso-academy" width="350" height="350">
+</p>
+
 <p align="center">© CodeVerso Academy</p>
