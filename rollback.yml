@@ -1,0 +1,55 @@
+---
+# =========================================================================================
+# PLAYBOOK DE ROLLBACK TOTAL: Desfaz as configurações do Orion Workstation
+# =========================================================================================
+# Descrição:
+#   Este playbook executa um rollback completo do Orion Workstation, removendo
+#   todos os pacotes listados nas roles, independentemente de estarem instalados ou não.
+#
+#   Resumo:
+#     - O parâmetro `ignore_errors: true` é utilizado nas tarefas de desinstalação para garantir
+#       que o playbook continue executando mesmo que algum pacote não esteja instalado.
+#       Isso evita que o processo de rollback seja interrompido por falhas não críticas.
+#
+#   Funcionamento:
+#     - Tenta desinstalar todas as ações realizadas nas roles, mesmo que alguns deles nunca tenham
+#       sido instalados (por exemplo, se apenas o AWS CLI foi instalado, ainda assim
+#       tentará remover Azure CLI e Google Cloud CLI).
+#     - Limpa dependências não utilizadas após a remoção dos pacotes.
+#
+#   Atenção:
+#     - Recomenda-se fortemente realizar backup dos dados importantes antes de executar.
+# =========================================================================================
+
+- name: ORION WORKSTATION - ROLLBACK TOTAL
+  hosts: localhost
+  connection: local
+
+  # Carrega as listas de pacotes a serem removidos.
+  vars_files:
+    - "roles/packages/defaults/main.yml"
+
+  tasks:
+    - name: "SEGURANCA | Muda o shell padrão para BASH"
+      become: true
+      ansible.builtin.user:
+        name: "{{ ansible_user_id }}"
+        shell: /bin/bash
+
+    - name: "ROLLBACK | Packages"
+      block:
+        - name: Desinstala todos os pacotes definidos
+          become: true
+          ansible.builtin.apt:
+            # Combina as duas listas de pacotes em uma só
+            name: "{{ essential_packages + optional_packages }}"
+            state: absent
+            purge: true
+          ignore_errors: true
+
+        - name: Limpa quaisquer dependências não utilizadas
+          become: true
+          ansible.builtin.apt:
+            autoremove: true
+
+...

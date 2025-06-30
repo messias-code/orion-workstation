@@ -1,1 +1,0 @@
-echo "Rollback script está em desenvolvimento. Por favor, aguarde a implementação completa."
