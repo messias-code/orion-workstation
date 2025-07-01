@@ -1,0 +1,20 @@
+---
+# Esta tarefa Ansible instala pacotes essenciais e opcionais no sistema usando o gerenciador de pacotes APT.
+#
+# Tarefas:
+# - "Instalação dos pacotes essenciais necessários":
+#     Instala uma lista de pacotes fundamentais para o funcionamento e administração do sistema,
+# - "Instalação dos pacotes opcionais":
+#     Instala pacotes adicionais voltados para uso pessoal ou acadêmico,
+#
+# Ambas as tarefas utilizam privilégio de superusuário (become: true) e instalam recomendações de pacotes.
+
+- name: Instalação dos pacotes opcionais
+  become: true
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    install_recommends: yes
+    state: present
+  loop: "{{ optional_packages }}"
+
+...

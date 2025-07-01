@@ -1,0 +1,15 @@
+---
+# Este arquivo define listas padrão de pacotes.
+#
+# optional_packages:
+#   Uma lista de pacotes adicionais que fornecem funcionalidades estendidas,
+#   como LaTeX e ferramentas de conversão de documentos. Não são estritamente necessários,
+#   mas podem ser úteis para determinados fluxos de trabalho.
+
+optional_packages:
+  - neovim
+  - tree
+  - texlive
+  - texlive-latex-extra
+  - texlive-xetex
+  - pandoc
