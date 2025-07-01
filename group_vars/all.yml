@@ -7,8 +7,8 @@ setup:
   # --- Atualização e aprimoramento do sistema operacional ---
   update_system: true 
   # --- Instalação de pacotes essenciais e opcionais ---
-  packages:
-    essential: true   # Instalar pacotes essenciais do sistema
-    optional: false   # Instalar pacotes opcionais
+  packages_optional: true
+  # --- Instalação do oh-my-zsh ---
+  oh_my_zsh: true
 
 ...

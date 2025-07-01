@@ -52,4 +52,7 @@
           ansible.builtin.apt:
             autoremove: true
 
+    - name: "ROLLBACK | oh_my_zsh"
+      # Implementar desinstalação do Oh My Zsh e seus componentes
+
 ...
