@@ -1,13 +1,13 @@
 ---
-# =========================================================================================
+# =====================================================================================================
 # PLAYBOOK DE ROLLBACK TOTAL: Desfaz as configurações do Orion Workstation
-# =========================================================================================
+# =====================================================================================================
 # Descrição:
 #   Este playbook executa um rollback completo do Orion Workstation, removendo
 #   todos os pacotes listados nas roles, independentemente de estarem instalados ou não.
 #
 #   Resumo:
-#     - O parâmetro `ignore_errors: true` é utilizado nas tarefas de desinstalação para garantir
+#   - O parâmetro `ignore_errors: true` é utilizado nas tarefas de desinstalação para garantir
 #       que o playbook continue executando mesmo que algum pacote não esteja instalado.
 #       Isso evita que o processo de rollback seja interrompido por falhas não críticas.
 #
@@ -19,15 +19,14 @@
 #
 #   Atenção:
 #     - Recomenda-se fortemente realizar backup dos dados importantes antes de executar.
-# =========================================================================================
+# =====================================================================================================
 
 - name: ORION WORKSTATION - ROLLBACK TOTAL
   hosts: localhost
   connection: local
 
-  # Carrega as listas de pacotes a serem removidos.
   vars_files:
-    - "roles/packages/defaults/main.yml"
+    - "roles/packages_optional/defaults/main.yml"
 
   tasks:
     - name: "SEGURANCA | Muda o shell padrão para BASH"
@@ -36,23 +35,40 @@
         name: "{{ ansible_user_id }}"
         shell: /bin/bash
 
-    - name: "ROLLBACK | Packages"
+    - name: "ROLLBACK | packages_optional"
       block:
         - name: Desinstala todos os pacotes definidos
           become: true
           ansible.builtin.apt:
-            # Combina as duas listas de pacotes em uma só
-            name: "{{ essential_packages + optional_packages }}"
+            name: "{{ optional_packages }}"
             state: absent
             purge: true
           ignore_errors: true
 
-        - name: Limpa quaisquer dependências não utilizadas
+    - name: "ROLLBACK | oh_my_zsh"
+      block:
+        - name: Remove arquivos e diretórios do Zsh
+          become: true
+          ansible.builtin.file:
+            path: "{{ item }}"
+            state: absent
+          loop:
+            - "/home/{{ ansible_user_id }}/.oh-my-zsh"
+            - "/home/{{ ansible_user_id }}/.zshrc"
+            - "/home/{{ ansible_user_id }}/.zsh_history"
+            - "/home/{{ ansible_user_id }}/.p10k.zsh"
+
+        - name: Desinstala o pacote zsh
           become: true
           ansible.builtin.apt:
-            autoremove: true
+            name: zsh
+            state: absent
+            purge: true
+          ignore_errors: true
 
-    - name: "ROLLBACK | oh_my_zsh"
-      # Implementar desinstalação do Oh My Zsh e seus componentes
+    - name: Limpa quaisquer dependências não utilizadas
+      become: true
+      ansible.builtin.apt:
+        autoremove: true
 
 ...
