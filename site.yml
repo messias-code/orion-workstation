@@ -17,6 +17,10 @@
 
   roles:
     - role: update_system
-    - role: packages
+      when: setup.update_system | bool
+    - role: packages_optional
+      when: setup.packages_optional | bool
+    - role: oh_my_zsh
+      when: setup.oh_my_zsh | bool
 
 ...
