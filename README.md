@@ -1,7 +1,7 @@
 # 🌌💻⚙️ Orion Workstation on WSL2
 
 <p align="center">
-    <img src="assets/Orion-Workstation-Project.jpg" alt="orion-workstation" width="550" height="450">
+    <img src="assets/Orion-Workstation-Project.jpg" alt="orion-workstation" width="450" height="400">
 </p>
 
 > Automatização para configuração de ambiente de desenvolvimento no WSL2 Ubuntu, utilizando Ansible para agilizar e padronizar a instalação de ferramentas e configurações essenciais para profissionais DevOps.
@@ -37,13 +37,26 @@ A documentação detalha cada funcionalidade, pré-requisitos e instruções par
 
 ```
 .
+├── LICENSE
 ├── README.md
+├── assets
+│   ├── CodeVerso-Academy.jpg
+│   └── Orion-Workstation-Project.jpg
 ├── group_vars
 │   └── all.yml
 ├── roles
-│   └── update_system
+│   ├── packages
+│   │   ├── defaults
+│   │   │   └── main.yml
+│   │   └── tasks
+│   │       └── main.yml
+│   ├── update_system
+│   │   └── tasks
+│   │       └── main.yml
+│   └── zsh
 │       └── tasks
 │           └── main.yml
+├── rollback.yml
 └── site.yml
 ```
 
@@ -52,8 +65,8 @@ A documentação detalha cada funcionalidade, pré-requisitos e instruções par
 Este projeto está em constante evolução para oferecer um ambiente DevOps cada vez mais completo. Ao longo de 2025, novas ferramentas e configurações serão integradas. Confira as etapas planejadas e em andamento:
 
 - [x] Atualização e Upgrade do Sistema Operacional
-- [x] Instalação de utilitários: Instalação de pacotes essenciais e opcionais
-- [ ] Terminal Moderno: Instalação e Customização com Oh-My-ZSH, Powerlevel10k e Plugins
+- [x] Instalação de utilitários: Instalação de pacotes opcionais
+- [x] Terminal Moderno: Instalação e Customização com Oh-My-ZSH, Powerlevel10k e Plugins
 - [ ] Containerização: Docker Engine e Docker Compose v2
 - [ ] Orquestração e Ferramentas Kubernetes: `kubectl`, `minikube`, `helm`, `k9s`
 - [ ] Servidores Web Populares: `nginx`, `apache2`
@@ -73,11 +86,11 @@ O playbook automatiza as seguintes configurações e instalações essenciais pa
     - Upgrade de segurança e limpeza de dependências
 
 2. **Instalação de utilitários**
-    - Instalação de pacotes essenciais e opcionais para o ambiente de desenvolvimento
+    - Instalação de pacotes opcionais para o ambiente de desenvolvimento
 
-3. **Terminal moderno** _(em desenvolvimento)_
+3. **Terminal moderno**
     - Setup do Oh-My-ZSH com tema Powerlevel10k
-    - Instalação e configuração de plugins úteis (ex: autosuggestions, syntax highlighting)
+    - Instalação e configuração de plugin (syntax highlighting)
     - Customização do prompt e variáveis de ambiente
 
 4. **Containerização** _(em desenvolvimento)_
