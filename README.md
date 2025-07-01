@@ -22,8 +22,8 @@ _**Feito com ❤️ para otimizar o tempo de desenvolvedores DevOps**_
 - [Uso](#-uso)
 - [Desfazendo as Alterações](#-desfazendo-as-alterações)
 - [Variáveis do Sistema](#-variáveis-do-sistema)
-- [Contribuição](#-contribuição)
 - [Licença](#-licença)
+- [Redes & Contato](#-redes--contato)
 
 ## 🚀 Sobre o Projeto
 
@@ -60,7 +60,7 @@ A documentação detalha cada funcionalidade, pré-requisitos e instruções par
 └── site.yml
 ```
 
-## 🗺️ Roadmap
+## 🌍 Roadmap
 
 Este projeto está em constante evolução para oferecer um ambiente DevOps cada vez mais completo. Ao longo de 2025, novas ferramentas e configurações serão integradas. Confira as etapas planejadas e em andamento:
 
