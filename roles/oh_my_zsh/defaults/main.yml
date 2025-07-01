@@ -1,0 +1,11 @@
+---
+# Pacotes necessarios para a role
+zsh_packages:
+  - zsh
+  - curl
+  - git
+
+# Nome do tema que sera utilizado no ZSH.
+# Pode ser alterado para outro tema do Powerlevel10k ou outro tema de sua preferencia.
+# Exemplo: "agnoster", "robbyrussell", etc.
+zsh_theme_name: "powerlevel10k/powerlevel10k"

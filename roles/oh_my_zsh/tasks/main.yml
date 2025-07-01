@@ -1,0 +1,63 @@
+---
+# Instala e configura o Oh My Zsh, plugin zsh-syntax-highlighting e tema Powerlevel10k para o usuário padrão.
+# Inclui instalação de dependências, configuração do .zshrc e definição do Zsh como shell padrão.
+#
+- name: ZSH | Garante que os pacotes necessarios estao instalados
+  become: true
+  ansible.builtin.apt:
+    name: "{{ zsh_packages }}"
+    state: present
+
+- name: ZSH | Verifica se o Oh My Zsh ja esta instalado
+  ansible.builtin.stat:
+    path: "/home/{{ ansible_user_id }}/.oh-my-zsh"
+  register: oh_my_zsh_stat
+
+- name: ZSH | Instala o Oh My Zsh
+  ansible.builtin.shell:
+    cmd: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  when: not oh_my_zsh_stat.stat.exists
+
+- name: ZSH | Verifica se o plugin Syntax Highlighting esta instalado
+  ansible.builtin.stat:
+    path: "/home/{{ ansible_user_id }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+  register: syntax_highlight_stat
+
+- name: ZSH | Instala o plugin ZSH Syntax Highlighting
+  ansible.builtin.git:
+    repo: "https://github.com/zsh-users/zsh-syntax-highlighting.git"
+    dest: "/home/{{ ansible_user_id }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+    depth: 1
+  when: not syntax_highlight_stat.stat.exists
+
+- name: ZSH | Verifica se o tema Powerlevel10k esta instalado
+  ansible.builtin.stat:
+    path: "/home/{{ ansible_user_id }}/.oh-my-zsh/custom/themes/powerlevel10k"
+  register: p10k_stat
+
+- name: ZSH | Instala o tema Powerlevel10k (base para o tema padrao)
+  ansible.builtin.git:
+    repo: "https://github.com/romkatv/powerlevel10k.git"
+    dest: "/home/{{ ansible_user_id }}/.oh-my-zsh/custom/themes/powerlevel10k"
+    depth: 1
+  when: not p10k_stat.stat.exists and "'powerlevel10k' in zsh_theme_name"
+
+- name: ZSH | Define o tema no .zshrc
+  ansible.builtin.lineinfile:
+    path: "/home/{{ ansible_user_id }}/.zshrc"
+    regexp: '^ZSH_THEME='
+    line: 'ZSH_THEME="{{ zsh_theme_name }}"'
+
+- name: ZSH | Ativa os plugins no .zshrc
+  ansible.builtin.lineinfile:
+    path: "/home/{{ ansible_user_id }}/.zshrc"
+    regexp: '^plugins='
+    line: 'plugins=(git zsh-syntax-highlighting)'
+
+- name: ZSH | Define o Zsh como o shell padrao do usuario
+  become: true
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    shell: /bin/zsh
+
+...
