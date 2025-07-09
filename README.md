@@ -260,27 +260,24 @@ O Ansible utiliza "facts" para coletar informações do sistema. As principais v
 
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-## 🌐 Redes & Contato
+## 📩 Contato
 
-Fique à vontade para acompanhar o projeto, tirar dúvidas ou trocar ideias nas redes abaixo:
+Fique à vontade para acompanhar o projeto, tirar dúvidas ou trocar ideias comigo:
 
 <p align="center">
-    <a href="https://www.linkedin.com/in/ihanmessias/">
-        <img src="https://img.shields.io/badge/LinkedIn-ihanmessias-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Ihan Messias">
+    <a href="mailto:codeverso.academy@gmail.com" target="_blank">
+        <img src="https://img.shields.io/badge/Email-codeverso.academy@gmail.com-008f11?style=for-the-badge&logo=gmail&logoColor=white" alt="Email CodeVerso Academy">
+        </a>
+        <a href="https://www.linkedin.com/in/ihanmessias/" target="_blank">
+        <img src="https://img.shields.io/badge/LinkedIn-messias--code-008f11?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Messias Code">
     </a>
-    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=codeverso.academy@gmail.com" target="_blank">
-        <img src="https://img.shields.io/badge/Email-codeverso.academy@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email CodeVerso Academy">
-    </a>
-    <a href="https://www.instagram.com/messias.code">
-        <img src="https://img.shields.io/badge/Instagram-messias.code-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram Messias Code">
-    </a>
-    <a href="https://www.youtube.com/@codeversoacademy">
-        <img src="https://img.shields.io/badge/YouTube-CodeVerso%20Academy-red?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube CodeVerso Academy">
-    </a>
+
 </p>
 
 <p align="center">
-    <img src="assets/CodeVerso-Academy.jpg" alt="codeverso-academy" width="350" height="350">
+    <a href="https://www.youtube.com/@codeversoacademy" target="_blank">
+        <img src="assets/CodeVerso-Academy.jpg" alt="codeverso-academy" width="350" height="350">
+    </a>
 </p>
 
 <p align="center">© CodeVerso Academy</p>
