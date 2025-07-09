@@ -45,15 +45,24 @@ A documentação detalha cada funcionalidade, pré-requisitos e instruções par
 ├── group_vars
 │   └── all.yml
 ├── roles
-│   ├── packages
+│   ├── docker_container
+│   │   ├── defaults
+│   │   │   └── main.yml
+│   │   ├── handlers
+│   │   │   └── main.yml
+│   │   └── tasks
+│   │       └── main.yml
+│   ├── oh_my_zsh
 │   │   ├── defaults
 │   │   │   └── main.yml
 │   │   └── tasks
 │   │       └── main.yml
-│   ├── update_system
+│   ├── packages_optional
+│   │   ├── defaults
+│   │   │   └── main.yml
 │   │   └── tasks
 │   │       └── main.yml
-│   └── zsh
+│   └── update_system
 │       └── tasks
 │           └── main.yml
 ├── rollback.yml
@@ -67,7 +76,7 @@ Este projeto está em constante evolução para oferecer um ambiente DevOps cada
 - [x] Atualização e Upgrade do Sistema Operacional
 - [x] Instalação de utilitários: Instalação de pacotes opcionais
 - [x] Terminal Moderno: Instalação e Customização com Oh-My-ZSH, Powerlevel10k e Plugins
-- [ ] Containerização: Docker Engine e Docker Compose v2
+- [x] Containerização: Docker Engine e Docker Compose v2
 - [ ] Orquestração e Ferramentas Kubernetes: `kubectl`, `minikube`, `helm`, `k9s`
 - [ ] Servidores Web Populares: `nginx`, `apache2`
 - [ ] Bancos de Dados Essenciais: `PostgreSQL`, `MongoDB`, `MySQL`
@@ -93,9 +102,9 @@ O playbook automatiza as seguintes configurações e instalações essenciais pa
     - Instalação e configuração de plugin (syntax highlighting)
     - Customização do prompt e variáveis de ambiente
 
-4. **Containerização** _(em desenvolvimento)_
+4. **Containerização**
     - Instalação completa do Docker Engine e Docker Compose v2
-    - Configuração de permissões e grupos para uso do Docker sem sudo
+    - Configuração de permissões em grupo para uso do Docker sem sudo
 
 5. **Orquestração e ferramentas Kubernetes** _(em desenvolvimento)_
     - Instalação do kubectl, minikube, helm e k9s
