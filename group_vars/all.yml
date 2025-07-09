@@ -10,5 +10,7 @@ setup:
   packages_optional: true
   # --- Instalação do oh-my-zsh ---
   oh_my_zsh: true
+  # --- Configuração e instalação do Docker ---
+  docker_container: true
 
 ...
