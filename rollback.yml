@@ -27,6 +27,7 @@
 
   vars_files:
     - "roles/packages_optional/defaults/main.yml"
+    - "roles/docker_container/defaults/main.yml"
 
   tasks:
     - name: "SEGURANCA | Muda o shell padrão para BASH"
@@ -35,7 +36,7 @@
         name: "{{ ansible_user_id }}"
         shell: /bin/bash
 
-    - name: "ROLLBACK | packages_optional"
+    - name: "ROLLBACK | Reverte a instalação dos pacotes opcionais"
       block:
         - name: Desinstala todos os pacotes definidos
           become: true
@@ -43,9 +44,8 @@
             name: "{{ optional_packages }}"
             state: absent
             purge: true
-          ignore_errors: true
 
-    - name: "ROLLBACK | oh_my_zsh"
+    - name: "ROLLBACK | Reverte a instalação e configuração do Oh My Zsh"
       block:
         - name: Remove arquivos e diretórios do Zsh
           become: true
@@ -64,11 +64,60 @@
             name: zsh
             state: absent
             purge: true
-          ignore_errors: true
+        
+    - name: "ROLLBACK | Reverte a instalação e configuração do Docker"
+      block:
+        - name: "ROLLBACK | Coleta os fatos sobre os serviços do sistema"
+          ansible.builtin.service_facts:
 
-    - name: Limpa quaisquer dependências não utilizadas
+        - name: "ROLLBACK | Para e desabilita os serviços do Docker (se existirem)"
+          become: true
+          ansible.builtin.systemd:
+            name: "{{ item }}"
+            state: stopped
+            enabled: no
+          loop:
+            - docker.service
+            - docker.socket
+            - containerd.service
+          when: item in ansible_facts.services
+
+        - name: "ROLLBACK | Remove o grupo 'docker'"
+          become: true
+          ansible.builtin.group:
+            name: docker
+            state: absent
+
+        - name: "ROLLBACK | Remove os pacotes do Docker e seus componentes"
+          become: true
+          ansible.builtin.apt:
+            name: "{{ packages_docker }}"
+            state: absent
+            purge: true
+            autoremove: yes
+
+        - name: "ROLLBACK | Remove o arquivo de repositório do Docker"
+          become: true
+          ansible.builtin.file:
+            path: /etc/apt/sources.list.d/docker.list
+            state: absent
+
+        - name: "ROLLBACK | Remove a chave GPG do Docker"
+          become: true
+          ansible.builtin.file:
+            path: /etc/apt/keyrings/docker.gpg
+            state: absent
+
+        - name: "ROLLBACK | Remove o diretório de dados do Docker (ATENÇÃO: AÇÃO DESTRUTIVA)"
+          become: true
+          ansible.builtin.file:
+            path: /var/lib/docker
+            state: absent # CUIDADO: Isso apaga TODAS as imagens, contêineres e volumes.
+
+    - name: "ROLLBACK | Atualiza o cache do APT para finalizar a limpeza"
       become: true
       ansible.builtin.apt:
+        update_cache: yes
         autoremove: true
 
 ...
