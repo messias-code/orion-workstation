@@ -22,5 +22,7 @@
       when: setup.packages_optional | bool
     - role: oh_my_zsh
       when: setup.oh_my_zsh | bool
+    - role: docker_container
+      when: setup.docker_container | bool
 
 ...
