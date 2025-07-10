@@ -1,0 +1,82 @@
+---
+# Esta tarefa Ansible instala e configura o Docker Engine e o Docker Compose no sistema.
+#
+# Tarefas:
+# - "Assegura a existência do diretório de keyrings do APT":
+#     Garante que o diretório para armazenar chaves GPG do APT exista,
+# - "Adiciona a chave GPG oficial do Docker":
+#     Baixa e converte a chave GPG do Docker para o formato adequado,
+# - "Adiciona o repositório do Docker":
+#     Configura o repositório oficial do Docker para o APT,
+# - "Instala os pacotes do Docker e dependências":
+#     Instala o Docker Engine, Docker Compose e dependências necessárias,
+# - "Garante o grupo 'docker' e adiciona o usuário":
+#     Cria o grupo docker e adiciona o usuário atual para permitir uso sem sudo.
+#
+# Todas as tarefas utilizam privilégio de superusuário (become: true) e garantem a instalação segura dos componentes.
+
+- name: "DOCKER | Cria o diretório de keyrings do APT se não existir"
+  become: true
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: "DOCKER | Verifica se a chave GPG do Docker já existe"
+  become: true
+  ansible.builtin.stat:
+    path: /etc/apt/keyrings/docker.gpg
+  register: docker_gpg_key
+
+- name: "DOCKER | Adiciona a chave GPG oficial do Docker"
+  become: true
+  ansible.builtin.get_url:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    dest: /tmp/docker.asc # Salva a chave no formato ASCII
+    mode: '0644'
+  when: not docker_gpg_key.stat.exists
+
+- name: "DOCKER | Converte a chave para o formato GPG (dearmor)"
+  become: true
+  ansible.builtin.command:
+    cmd: gpg --dearmor -o /etc/apt/keyrings/docker.gpg /tmp/docker.asc
+  args:
+    creates: /etc/apt/keyrings/docker.gpg
+  when: not docker_gpg_key.stat.exists
+
+- name: "DOCKER | Remove a chave GPG temporária"
+  become: true
+  ansible.builtin.file:
+    path: /tmp/docker.asc
+    state: absent
+  when: not docker_gpg_key.stat.exists
+
+- name: "DOCKER | Adiciona o repositório do Docker"
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    state: present
+    filename: docker
+
+- name: "DOCKER | Instala os pacotes do Docker e suas dependências"
+  become: true
+  ansible.builtin.apt:
+    name: "{{ packages_docker }}"
+    state: present
+    update_cache: yes
+  notify: restart service docker
+
+- name: "DOCKER | Garante que o grupo 'docker' exista"
+  become: true
+  ansible.builtin.group:
+    name: docker
+    state: present
+
+- name: "DOCKER | Adiciona o usuário ao grupo 'docker' para executar sem sudo"
+  become: true
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    groups: docker
+    append: yes
+
+...

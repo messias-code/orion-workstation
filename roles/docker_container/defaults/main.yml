@@ -1,0 +1,16 @@
+---
+# Este arquivo define a lista padrão de pacotes do Docker a serem instalados.
+#
+# packages_docker:
+#   Estes pacotes são essenciais para uma instalação moderna do Docker, incluindo
+#   o motor, a linha de comando (CLI), o containerd (runtime) e os plugins
+#   para build (buildx) e orquestração (compose).
+
+packages_docker:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+  - docker-buildx-plugin
+  - docker-compose-plugin
+
+...

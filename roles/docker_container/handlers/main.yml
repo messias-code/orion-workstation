@@ -1,0 +1,19 @@
+---
+# Este handler Ansible reinicia o serviço Docker e garante que ele esteja habilitado
+# para iniciar automaticamente com o sistema.
+#
+# Handler:
+# - "Reiniciar o serviço Docker":
+#     Reinicia o serviço Docker e o habilita para inicialização automática,
+#
+# O handler utiliza privilégio de superusuário (become: true).
+
+- name: Reinicia o serviço Docker
+  become: true
+  ansible.builtin.systemd:
+    name: docker
+    state: restarted
+    enabled: yes
+  listen: restart service docker
+
+...
