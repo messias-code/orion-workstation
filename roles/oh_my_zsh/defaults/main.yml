@@ -1,5 +1,9 @@
 ---
-# Pacotes necessarios para a role
+# Este arquivo define a lista padrão de pacotes do ZSH a serem instalados.
+#
+# zsh_packages:
+#   Estes pacotes são essenciais para uma instalação moderna do ZSH, incluindo
+#   o shell, o utilitário de download (curl) e o controle de versões (git).
 zsh_packages:
   - zsh
   - curl
@@ -9,3 +13,5 @@ zsh_packages:
 # Pode ser alterado para outro tema do Powerlevel10k ou outro tema de sua preferencia.
 # Exemplo: "agnoster", "robbyrussell", etc.
 zsh_theme_name: "powerlevel10k/powerlevel10k"
+
+...

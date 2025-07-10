@@ -1,7 +1,18 @@
 ---
-# Instala e configura o Oh My Zsh, plugin zsh-syntax-highlighting e tema Powerlevel10k para o usuário padrão.
-# Inclui instalação de dependências, configuração do .zshrc e definição do Zsh como shell padrão.
+# Esta tarefa Ansible instala e configura o Oh My Zsh, incluindo o plugin zsh-syntax-highlighting e o tema Powerlevel10k para o usuário padrão.
 #
+# Tarefas:
+# - "Instalação dos pacotes necessários para o Zsh":
+#     Garante que todos os pacotes essenciais para o funcionamento do Zsh estejam presentes no sistema.
+# - "Instalação e configuração do Oh My Zsh":
+#     Instala o Oh My Zsh, configura o tema Powerlevel10k (se selecionado) e ativa o plugin zsh-syntax-highlighting.
+# - "Configuração do .zshrc":
+#     Define o tema e os plugins no arquivo .zshrc do usuário.
+# - "Definição do Zsh como shell padrão":
+#     Altera o shell padrão do usuário para o Zsh.
+#
+# Todas as tarefas utilizam privilégio de superusuário (become: true) quando necessário.
+
 - name: ZSH | Garante que os pacotes necessarios estao instalados
   become: true
   ansible.builtin.apt:
