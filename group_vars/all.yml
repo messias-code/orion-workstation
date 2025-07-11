@@ -12,5 +12,7 @@ setup:
   oh_my_zsh: true
   # --- Configuração e instalação do Docker ---
   docker_container: true
+  # --- Instalação do Kubernetes ---
+  kubernetes_orchestration: true
 
 ...
