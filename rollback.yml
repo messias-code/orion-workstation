@@ -1,4 +1,3 @@
----
 # =====================================================================================================
 # PLAYBOOK DE ROLLBACK TOTAL: Desfaz as configurações do Orion Workstation
 # =====================================================================================================
@@ -28,6 +27,7 @@
   vars_files:
     - "roles/packages_optional/defaults/main.yml"
     - "roles/docker_container/defaults/main.yml"
+    - "roles/kubernetes_orchestration/defaults/main.yml"
 
   tasks:
     - name: "SEGURANCA | Muda o shell padrão para BASH"
@@ -37,18 +37,15 @@
         shell: /bin/bash
 
     - name: "ROLLBACK | Reverte a instalação dos pacotes opcionais"
-      block:
-        - name: Desinstala todos os pacotes definidos
-          become: true
-          ansible.builtin.apt:
-            name: "{{ optional_packages }}"
-            state: absent
-            purge: true
+      become: true
+      ansible.builtin.apt:
+        name: "{{ optional_packages }}"
+        state: absent
+        purge: true
 
     - name: "ROLLBACK | Reverte a instalação e configuração do Oh My Zsh"
       block:
         - name: Remove arquivos e diretórios do Zsh
-          become: true
           ansible.builtin.file:
             path: "{{ item }}"
             state: absent
@@ -64,7 +61,7 @@
             name: zsh
             state: absent
             purge: true
-        
+
     - name: "ROLLBACK | Reverte a instalação e configuração do Docker"
       block:
         - name: "ROLLBACK | Coleta os fatos sobre os serviços do sistema"
@@ -112,12 +109,51 @@
           become: true
           ansible.builtin.file:
             path: /var/lib/docker
-            state: absent # CUIDADO: Isso apaga TODAS as imagens, contêineres e volumes.
+            state: absent
 
-    - name: "ROLLBACK | Atualiza o cache do APT para finalizar a limpeza"
+    - name: "ROLLBACK | Reverte a instalação completa do ecossistema Kubernetes"
+      block:
+        - name: "KUBERNETES | Remove arquivos de configuração e cache do Helm"
+          ansible.builtin.file:
+            path: "{{ item }}"
+            state: absent
+          loop:
+            - "/home/{{ ansible_user_id }}/.config/helm"
+            - "/home/{{ ansible_user_id }}/.cache/helm"
+
+        - name: "KUBERNETES | Remove os pacotes do Kubernetes (usando dpkg)"
+          become: true
+          ansible.builtin.command:
+            cmd: "dpkg --purge {{ item }}"
+          loop: "{{ kubernetes_packages }}"
+          register: dpkg_purge_result
+          changed_when: "'purging' in dpkg_purge_result.stdout"
+          ignore_errors: true
+
+        - name: "KUBERNETES | Remove o arquivo de repositório APT do Kubernetes"
+          become: true
+          ansible.builtin.file:
+            path: /etc/apt/sources.list.d/kubernetes.list
+            state: absent
+
+        - name: "KUBERNETES | Remove a chave GPG do repositório Kubernetes"
+          become: true
+          ansible.builtin.file:
+            path: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+            state: absent
+
+        - name: "KUBERNETES | Remove os binários (minikube, helm, k9s)"
+          become: true
+          ansible.builtin.file:
+            path: "{{ item }}"
+            state: absent
+          loop: "{{ kubernetes_bin_path }}"
+
+    - name: "ROLLBACK | Atualiza o cache do APT e remove dependências não utilizadas"
       become: true
       ansible.builtin.apt:
         update_cache: yes
-        autoremove: true
+        autoremove: yes
+      ignore_errors: true
 
 ...
