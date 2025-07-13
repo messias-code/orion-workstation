@@ -9,7 +9,7 @@
 #
 # Ambas as tarefas utilizam privilégio de superusuário (become: true) e instalam recomendações de pacotes.
 
-- name: Instalação dos pacotes opcionais
+- name: "PACKAGES | Instalação dos pacotes opcionais"
   become: true
   ansible.builtin.apt:
     name: "{{ item }}"
