@@ -23,7 +23,7 @@ _**Feito com ❤️ para otimizar o tempo de desenvolvedores DevOps**_
 - [Desfazendo as Alterações](#-desfazendo-as-alterações)
 - [Variáveis do Sistema](#-variáveis-do-sistema)
 - [Licença](#-licença)
-- [Redes & Contato](#-redes--contato)
+- [Contato](#-contato)
 
 ## 🚀 Sobre o Projeto
 
@@ -42,10 +42,20 @@ A documentação detalha cada funcionalidade, pré-requisitos e instruções par
 ├── assets
 │   ├── CodeVerso-Academy.jpg
 │   └── Orion-Workstation-Project.jpg
+├── collections
+│   └── requirements.yml
 ├── group_vars
 │   └── all.yml
+├── installation_check.py
 ├── roles
 │   ├── docker_container
+│   │   ├── defaults
+│   │   │   └── main.yml
+│   │   ├── handlers
+│   │   │   └── main.yml
+│   │   └── tasks
+│   │       └── main.yml
+│   ├── kubernetes_orchestration
 │   │   ├── defaults
 │   │   │   └── main.yml
 │   │   ├── handlers
@@ -66,6 +76,7 @@ A documentação detalha cada funcionalidade, pré-requisitos e instruções par
 │       └── tasks
 │           └── main.yml
 ├── rollback.yml
+├── rollback_check.py
 └── site.yml
 ```
 
@@ -77,7 +88,7 @@ Este projeto está em constante evolução para oferecer um ambiente DevOps cada
 - [x] Instalação de utilitários: Instalação de pacotes opcionais
 - [x] Terminal Moderno: Instalação e Customização com Oh-My-ZSH, Powerlevel10k e Plugins
 - [x] Containerização: Docker Engine e Docker Compose v2
-- [ ] Orquestração e Ferramentas Kubernetes: `kubectl`, `minikube`, `helm`, `k9s`
+- [x] Orquestração e Ferramentas Kubernetes: `kubectl`, `kubelet`, `kubeadm`, `minikube`, `helm`, `k9s`
 - [ ] Servidores Web Populares: `nginx`, `apache2`
 - [ ] Bancos de Dados Essenciais: `PostgreSQL`, `MongoDB`, `MySQL`
 - [ ] Monitoramento e Observabilidade: `Prometheus`, `Grafana`, `Zabbix`
@@ -106,8 +117,8 @@ O playbook automatiza as seguintes configurações e instalações essenciais pa
     - Instalação completa do Docker Engine e Docker Compose v2
     - Configuração de permissões em grupo para uso do Docker sem sudo
 
-5. **Orquestração e ferramentas Kubernetes** _(em desenvolvimento)_
-    - Instalação do kubectl, minikube, helm e k9s
+5. **Orquestração e ferramentas Kubernetes**
+    - Instalação do kubectl, kubelet, kubeadm, minikube, helm e k9s
 
 6. **Servidores Web** _(em desenvolvimento)_
     - Instalação do nginx e apache2
@@ -163,6 +174,13 @@ sudo apt install ansible
 ```bash
 git clone https://github.com/messias-code/orion-workstation
 cd orion-workstation
+```
+
+### 3. Instalar as Dependências (Collections)
+O projeto utiliza collections do Ansible Galaxy para estender suas funcionalidades. Instale todas as dependências necessárias com um único comando, utilizando o arquivo de requerimentos.
+
+```bash
+ansible-galaxy collection install -r collections/requirements.yml
 ```
 
 ## 🖥️ Configuração do Windows Terminal
@@ -226,6 +244,13 @@ Após a execução:
 2. Reinicie o terminal para que as alterações tenham efeito
 3. Configure o tema Powerlevel10k na primeira execução do ZSH
 
+Para uma verificação detalhada da instalação, execute o comando:
+
+```bash
+python3 installation.py
+```
+
+O script exibirá um relatório com o status dos principais componentes instalados pelo playbook.
 
 ## 🔄 Desfazendo as Alterações
 
@@ -244,6 +269,13 @@ ansible-playbook rollback.yml --ask-become-pass
 Após a execução do rollback, reinicie o terminal para garantir que todas as alterações sejam aplicadas corretamente.
 
 Se necessário, revise o arquivo `rollback.yml` para personalizar etapas específicas de reversão conforme seu ambiente.
+
+
+### 3. Verifique se a remoção foi completa:
+
+```bash
+python3 rollback_check.py
+```
 
 ## 🔍 Variáveis do Sistema
 
