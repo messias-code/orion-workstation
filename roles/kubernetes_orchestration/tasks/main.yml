@@ -1,0 +1,132 @@
+---
+# Esta tarefa Ansible instala e configura componentes essenciais do Kubernetes no sistema.
+#
+# Tarefas:
+# - "Instalação dos componentes principais do Kubernetes":
+#     Instala kubeadm, kubelet e kubectl para orquestração de clusters Kubernetes,
+# - "Inicialização do cluster Kubernetes (opcional)":
+#     Inicializa o cluster usando kubeadm, se necessário,
+#
+# Todas as tarefas utilizam privilégio de superusuário (become: true) e seguem as recomendações oficiais do Kubernetes.
+
+- name: "KUBERNETES | Instalação do containerd"
+  become: true
+  ansible.builtin.apt:
+    name: containerd.io
+    state: present
+    update_cache: true
+
+- name: "KUBERNETES | Diretório de configuração do containerd"
+  become: true
+  ansible.builtin.file:
+    path: /etc/containerd
+    state: directory
+    mode: '0755'
+
+- name: "KUBERNETES | Configuração padrão do containerd"
+  become: true
+  ansible.builtin.command:
+    cmd: containerd config default
+  register: containerd_config_default
+  changed_when: false
+  check_mode: true
+
+- name: "KUBERNETES | Aplicação da configuração padrão do containerd"
+  become: true
+  ansible.builtin.copy:
+    content: "{{ containerd_config_default.stdout }}"
+    dest: /etc/containerd/config.toml
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart containerd
+
+- name: "KUBERNETES | Instalar Helm"
+  become: true
+  ansible.builtin.unarchive:
+    src: "https://get.helm.sh/helm-v{{ helm_version }}-linux-amd64.tar.gz"
+    dest: /usr/local/bin
+    remote_src: yes
+    extra_opts: [--strip-components=1, linux-amd64/helm]
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: "KUBERNETES | Adicionar repositório stable do Helm (se necessário)"
+  community.kubernetes.helm_repository:
+    name: stable
+    repo_url: "https://charts.helm.sh/stable"
+    state: present
+
+- name: "KUBERNETES | Instalar k9s"
+  become: true
+  ansible.builtin.unarchive:
+    src: "https://github.com/derailed/k9s/releases/download/v{{ k9s_version }}/k9s_Linux_amd64.tar.gz"
+    dest: /usr/local/bin
+    remote_src: yes
+    include:
+      - k9s
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: "KUBERNETES | Instalar Minikube"
+  become: true
+  ansible.builtin.get_url:
+    url: "https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64"
+    dest: /usr/local/bin/minikube
+    mode: '0755'
+
+- name: "KUBERNETES | Criar diretório para chaves GPG do APT"
+  become: true
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: "KUBERNETES | Baixar chave GPG (formato de texto)"
+  become: true
+  ansible.builtin.uri:
+    url: "https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key"
+    dest: "/tmp/kubernetes-apt-keyring.asc"
+    mode: '0644'
+  register: key_download
+
+- name: "KUBERNETES | Converter chave GPG para o formato binário"
+  become: true
+  ansible.builtin.command:
+    cmd: "gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg /tmp/kubernetes-apt-keyring.asc"
+    creates: /etc/apt/keyrings/kubernetes-apt-keyring.gpg # Garante idempotência
+
+- name: "KUBERNETES | Remover chave GPG temporária"
+  become: true
+  ansible.builtin.file:
+    path: "/tmp/kubernetes-apt-keyring.asc"
+    state: absent
+
+- name: "KUBERNETES | Adicionar repositório APT do Kubernetes"
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /"
+    state: present
+    filename: kubernetes
+
+- name: "KUBERNETES | Instalar pacotes Kubernetes"
+  become: true
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  loop: "{{ kubernetes_packages }}"
+
+- name: "KUBERNETES | Marcar pacotes Kubernetes com 'hold'"
+  become: true
+  ansible.builtin.dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  loop:
+    - kubelet
+    - kubeadm
+    - kubectl
+
+...
