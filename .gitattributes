@@ -1,0 +1,10 @@
+# Força o GitHub Linguist a reconhecer corretamente os tipos de arquivos listados abaixo
+
+# Tratar = os arquivos .yml como YAML
+*.yml linguist-language=YAML
+
+# Tratar o script de .py como Python
+*.py linguist-language=Python
+
+# Tratar o script de .sh como Shell
+*.sh linguist-language=Shell
