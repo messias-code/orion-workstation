@@ -16,5 +16,3 @@
     install_recommends: yes
     state: present
   loop: "{{ optional_packages }}"
-
-...

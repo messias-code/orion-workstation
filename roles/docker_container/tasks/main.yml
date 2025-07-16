@@ -20,7 +20,7 @@
   ansible.builtin.file:
     path: /etc/apt/keyrings
     state: directory
-    mode: '0755'
+    mode: "0755"
 
 - name: "DOCKER | Verifica se a chave GPG do Docker já existe"
   become: true
@@ -33,7 +33,7 @@
   ansible.builtin.get_url:
     url: https://download.docker.com/linux/ubuntu/gpg
     dest: /tmp/docker.asc # Salva a chave no formato ASCII
-    mode: '0644'
+    mode: "0644"
   when: not docker_gpg_key.stat.exists
 
 - name: "DOCKER | Converte a chave para o formato GPG (dearmor)"
@@ -78,5 +78,3 @@
     name: "{{ ansible_user_id }}"
     groups: docker
     append: yes
-
-...

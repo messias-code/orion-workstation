@@ -1,5 +1,8 @@
+# Manipuladores para o papel de orquestração do Ansible.
+# Este arquivo contém tarefas que são acionadas por instruções notify.
+
 ---
-- name: Restart containerd
+- name: Reiniciar containerd
   become: true
   ansible.builtin.service:
     name: containerd

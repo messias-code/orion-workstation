@@ -13,5 +13,3 @@ zsh_packages:
 # Pode ser alterado para outro tema do Powerlevel10k ou outro tema de sua preferencia.
 # Exemplo: "agnoster", "robbyrussell", etc.
 zsh_theme_name: "powerlevel10k/powerlevel10k"
-
-...

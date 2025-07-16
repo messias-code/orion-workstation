@@ -1,3 +1,7 @@
+---
+# Versões do Kubernetes
+kubernetes_version: "1.31"
+
 # Versões das ferramentas
 helm_version: "3.15.2"
 k9s_version: "0.32.5"

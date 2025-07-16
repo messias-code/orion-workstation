@@ -9,5 +9,3 @@
   ansible.builtin.apt:
     update_cache: true
     upgrade: dist
-
-...

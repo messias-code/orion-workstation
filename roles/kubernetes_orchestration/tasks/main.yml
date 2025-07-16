@@ -21,7 +21,7 @@
   ansible.builtin.file:
     path: /etc/containerd
     state: directory
-    mode: '0755'
+    mode: "0755"
 
 - name: "KUBERNETES | Configuração padrão do containerd"
   become: true
@@ -38,7 +38,7 @@
     dest: /etc/containerd/config.toml
     owner: root
     group: root
-    mode: '0644'
+    mode: "0644"
   notify: Restart containerd
 
 - name: "KUBERNETES | Instalar Helm"
@@ -48,7 +48,7 @@
     dest: /usr/local/bin
     remote_src: yes
     extra_opts: [--strip-components=1, linux-amd64/helm]
-    mode: '0755'
+    mode: "0755"
     owner: root
     group: root
 
@@ -66,7 +66,7 @@
     remote_src: yes
     include:
       - k9s
-    mode: '0755'
+    mode: "0755"
     owner: root
     group: root
 
@@ -75,21 +75,21 @@
   ansible.builtin.get_url:
     url: "https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64"
     dest: /usr/local/bin/minikube
-    mode: '0755'
+    mode: "0755"
 
 - name: "KUBERNETES | Criar diretório para chaves GPG do APT"
   become: true
   ansible.builtin.file:
     path: /etc/apt/keyrings
     state: directory
-    mode: '0755'
+    mode: "0755"
 
 - name: "KUBERNETES | Baixar chave GPG (formato de texto)"
   become: true
   ansible.builtin.uri:
-    url: "https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key"
+    url: "https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_version }}/deb/Release.key"
     dest: "/tmp/kubernetes-apt-keyring.asc"
-    mode: '0644'
+    mode: "0644"
   register: key_download
 
 - name: "KUBERNETES | Converter chave GPG para o formato binário"
@@ -107,7 +107,7 @@
 - name: "KUBERNETES | Adicionar repositório APT do Kubernetes"
   become: true
   ansible.builtin.apt_repository:
-    repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /"
+    repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_version }}/deb/ /"
     state: present
     filename: kubernetes
 
@@ -124,9 +124,4 @@
   ansible.builtin.dpkg_selections:
     name: "{{ item }}"
     selection: hold
-  loop:
-    - kubelet
-    - kubeadm
-    - kubectl
-
-...
+  loop: "{{ kubernetes_packages }}"

@@ -26,5 +26,3 @@
       when: setup.docker_container | bool
     - role: kubernetes_orchestration
       when: setup.kubernetes_orchestration | bool
-
-...

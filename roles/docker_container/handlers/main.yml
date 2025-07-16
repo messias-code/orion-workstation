@@ -15,5 +15,3 @@
     state: restarted
     enabled: yes
   listen: restart service docker
-
-...

@@ -155,5 +155,3 @@
         update_cache: yes
         autoremove: yes
       ignore_errors: true
-
-...
