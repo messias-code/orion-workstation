@@ -154,7 +154,7 @@ Assim, você tem total controle sobre o que será instalado no seu ambiente.
 
 ## 🔧 Instalação
 
-### 1. Instalar o Ansible
+### 1. Instalar o Ansible e suas dependências
 
 ```bash
 # Atualizar os repositórios
@@ -235,7 +235,7 @@ ansible-galaxy collection install -r collections/requirements.yml
 Para executar o playbook:
 
 ```bash
-ansible-playbook playbook.yml --ask-become-pass
+ansible-playbook site.yml --ask-become-pass
 ```
 
 > **OBS: A senha é do seu usuário root**
@@ -279,12 +279,13 @@ O script exibirá um relatório com o status dos principais componentes do ambie
 
 O Ansible utiliza "facts" para coletar informações do sistema. As principais variáveis utilizadas neste playbook são:
 
-| Variável                   | Comando para Verificar         | Descrição                       |
-|----------------------------|-------------------------------|---------------------------------|
-| `ansible_env.USER`         | `whoami` ou `echo $USER`      | Nome do usuário atual           |
-| `ansible_user_id`          | `id -u`                       | ID do usuário atual             |
-| `ansible_distribution_release` | `lsb_release -cs`          | Nome da versão do Ubuntu        |
-| `ansible_env.SHELL`        | `echo $SHELL`                 | Caminho do shell padrão do usuário |
+| Variável                      | Comando para Verificar                        | Descrição                                                                                   |
+|-------------------------------|-----------------------------------------------|---------------------------------------------------------------------------------------------|
+| `ansible_env.USER`            | `whoami` ou `echo $USER`                      | Nome do usuário atual                                                                       |
+| `ansible_user_id`             | `id -u`                                       | ID do usuário atual                                                                         |
+| `ansible_distribution_release`| `lsb_release -cs`                             | Nome da versão do Ubuntu                                                                    |
+| `ansible_env.SHELL`           | `echo $SHELL`                                 | Caminho do shell padrão do usuário                                                          |
+| `ansible_facts.services`      | `systemctl list-units --type=service`         | Dicionário com os serviços do sistema, usado para verificar se um serviço existe            |
 
 ## 📝 Licença
 
