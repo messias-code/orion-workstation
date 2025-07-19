@@ -26,3 +26,6 @@
       when: setup.docker_container | bool
     - role: kubernetes_orchestration
       when: setup.kubernetes_orchestration | bool
+    - role: web_servers
+      # Verifica se a variável está definida e que tenha elementos (acesse roles/web_servers/defaults/main.yml)
+      when: setup.web_servers | bool and web_servers_install | length > 0
