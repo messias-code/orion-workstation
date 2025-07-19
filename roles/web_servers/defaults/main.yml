@@ -1,0 +1,7 @@
+---
+# Define a lista padrão de servidores web a serem instalados.
+# Para não instalar um servidor, simplesmente comente o item da lista.
+
+web_servers_install:
+  - nginx
+  - apache2

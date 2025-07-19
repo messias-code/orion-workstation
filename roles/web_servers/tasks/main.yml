@@ -1,0 +1,25 @@
+---
+# Esta tarefa Ansible instala os servidores web listados na variável
+# 'web_servers_install' e garante que seus serviços não iniciem automaticamente.
+# Se desejar adicionar ou remover servidores, modifique a variável
+# 'web_servers_install' no arquivo group_vars/all.yml.
+
+- name: "WEB SERVERS | Instala os pacotes de servidores web selecionados"
+  become: true
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  loop: "{{ web_servers_install }}"
+  loop_control:
+    label: "{{ item }}"
+
+- name: "WEB SERVERS | Garante que os serviços instalados estejam parados e desabilitados"
+  become: true
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+  loop: "{{ web_servers_install }}"
+  loop_control:
+    label: "{{ item }}"
