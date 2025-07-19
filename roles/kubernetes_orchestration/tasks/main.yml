@@ -53,7 +53,7 @@
     group: root
 
 - name: "KUBERNETES | Adicionar repositório stable do Helm (se necessário)"
-  community.kubernetes.helm_repository:
+  kubernetes.core.helm_repository:
     name: stable
     repo_url: "https://charts.helm.sh/stable"
     state: present
@@ -84,25 +84,32 @@
     state: directory
     mode: "0755"
 
+- name: "KUBERNETES | Verifica se a chave GPG do Kubernetes já existe"
+  become: true
+  ansible.builtin.stat:
+    path: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+  register: kubernetes_gpg_key
+
 - name: "KUBERNETES | Baixar chave GPG (formato de texto)"
   become: true
   ansible.builtin.uri:
     url: "https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_version }}/deb/Release.key"
     dest: "/tmp/kubernetes-apt-keyring.asc"
     mode: "0644"
-  register: key_download
+  when: not kubernetes_gpg_key.stat.exists
 
 - name: "KUBERNETES | Converter chave GPG para o formato binário"
   become: true
   ansible.builtin.command:
     cmd: "gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg /tmp/kubernetes-apt-keyring.asc"
-    creates: /etc/apt/keyrings/kubernetes-apt-keyring.gpg # Garante idempotência
+  when: not kubernetes_gpg_key.stat.exists
 
 - name: "KUBERNETES | Remover chave GPG temporária"
   become: true
   ansible.builtin.file:
     path: "/tmp/kubernetes-apt-keyring.asc"
     state: absent
+  when: not kubernetes_gpg_key.stat.exists
 
 - name: "KUBERNETES | Adicionar repositório APT do Kubernetes"
   become: true
