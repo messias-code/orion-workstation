@@ -21,7 +21,6 @@ _**Feito com ❤️ para otimizar o tempo de desenvolvedores DevOps**_
 - [Configuração do Windows Terminal](#️-configuração-do-windows-terminal)
 - [Uso](#-uso)
 - [Desfazendo as Alterações](#-desfazendo-as-alterações)
-- [Verificação de Modificações](#-verificação-de-modificações)
 - [Variáveis do Sistema](#-variáveis-do-sistema)
 - [Licença](#-licença)
 - [Contato](#-contato)
@@ -245,6 +244,12 @@ Após a execução:
 2. Reinicie o terminal para que as alterações tenham efeito
 3. Configure o tema Powerlevel10k na primeira execução do ZSH
 
+Para uma verificação detalhada da instalação, execute o comando:
+
+```bash
+python3 installation.py
+```
+
 O script exibirá um relatório com o status dos principais componentes instalados pelo playbook.
 
 ## 🔄 Desfazendo as Alterações
@@ -265,15 +270,12 @@ Após a execução do rollback, reinicie o terminal para garantir que todas as a
 
 Se necessário, revise o arquivo `rollback.yml` para personalizar etapas específicas de reversão conforme seu ambiente.
 
-## 🧪 Verificação de Modificações
 
-Para verificar detalhadamente o status da instalação ou do rollback, utilize o script de verificação incluso no projeto. Basta executar o comando abaixo e escolher entre `install` ou `rollback` conforme a ação desejada:
+### 3. Verifique se a remoção foi completa:
 
 ```bash
-python3 check_workstation.py [install | rollback]
+python3 rollback_check.py
 ```
-
-O script exibirá um relatório com o status dos principais componentes do ambiente, facilitando o acompanhamento das alterações realizadas.
 
 ## 🔍 Variáveis do Sistema
 
