@@ -94,11 +94,12 @@ Este projeto está em constante evolução para oferecer um ambiente DevOps cada
 - [x] Terminal Moderno: Instalação e Customização com Oh-My-ZSH, Powerlevel10k e Plugins
 - [x] Containerização: Docker Engine e Docker Compose v2
 - [x] Orquestração e Ferramentas Kubernetes: `kubectl`, `kubelet`, `kubeadm`, `minikube`, `helm`, `k9s`
-- [ ] Servidores Web Populares: `nginx`, `apache2`
+- [x] Servidores Web Populares: `nginx`, `apache2`
 - [ ] Bancos de Dados Essenciais: `PostgreSQL`, `MongoDB`, `MySQL`
-- [ ] Monitoramento e Observabilidade: `Prometheus`, `Grafana`, `Zabbix`
+- [ ] Monitoramento e Observabilidade: `Prometheus`, `Grafana`, `Zabbix`, `Kafka`, `RabbitMQ`
 - [ ] Infraestrutura como Código: `OpenTofu`, `Terraform`, `Puppet`
-- [ ] CLIs de Nuvem: `AWS CLI`, `Azure CLI`, `Google Cloud CLI`
+- [ ] CLIs de Nuvem: `Azure CLI`, `AWS CLI`, `Google Cloud CLI`
+- [ ] CI/CD Integração e Entrega Contínua: Jenkins
 
 > 🔄 *Este projeto está em desenvolvimento ativo. Novas funcionalidades e melhorias são adicionadas regularmente. Contribuições e sugestões são bem-vindas!*
 
@@ -125,20 +126,23 @@ O playbook automatiza as seguintes configurações e instalações essenciais pa
 5. **Orquestração e ferramentas Kubernetes**
     - Instalação do kubectl, kubelet, kubeadm, minikube, helm e k9s
 
-6. **Servidores Web** _(em desenvolvimento)_
+6. **Servidores Web**
     - Instalação do nginx e apache2
 
 7. **Bancos de Dados** _(em desenvolvimento)_
     - Instalação do PostgreSQL, MongoDB e MySQL
 
 8. **Monitoramento e Observabilidade** _(em desenvolvimento)_
-    - Instalação do Prometheus, Grafana e Zabbix
+    - Instalação do Prometheus, Grafana, Zabbix, Kafka e RabbitMQ
 
 9. **Infraestrutura como Código** _(em desenvolvimento)_
     - Instalação do Terraform, OpenTofu e Puppet
 
 10. **Ferramentas de Cloud CLI** _(em desenvolvimento)_
     - Instalação do AWS CLI, Azure CLI e Google Cloud CLI
+
+11. **CI/CD (Integração e Entrega Contínua)** _(em desenvolvimento)_
+    - Instalação do servidor Jenkins
 
 
 > Todas as etapas são opcionais e podem ser customizadas conforme a necessidade do usuário, garantindo flexibilidade e padronização do ambiente.
