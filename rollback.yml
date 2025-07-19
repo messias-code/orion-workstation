@@ -28,6 +28,7 @@
     - "roles/packages_optional/defaults/main.yml"
     - "roles/docker_container/defaults/main.yml"
     - "roles/kubernetes_orchestration/defaults/main.yml"
+    - "roles/web_servers/defaults/main.yml"
 
   tasks:
     - name: "SEGURANCA | Muda o shell padrão para BASH"
@@ -36,14 +37,14 @@
         name: "{{ ansible_user_id }}"
         shell: /bin/bash
 
-    - name: "ROLLBACK | Reverte a instalação dos pacotes opcionais"
+    - name: "PACKAGES | Reverte a instalação dos pacotes opcionais"
       become: true
       ansible.builtin.apt:
         name: "{{ optional_packages }}"
         state: absent
         purge: true
 
-    - name: "ROLLBACK | Reverte a instalação e configuração do Oh My Zsh"
+    - name: "OhMyZSH | Reverte a instalação e configuração do Oh My Zsh"
       block:
         - name: Remove arquivos e diretórios do Zsh
           ansible.builtin.file:
@@ -64,28 +65,26 @@
 
     - name: "ROLLBACK | Reverte a instalação e configuração do Docker"
       block:
-        - name: "ROLLBACK | Coleta os fatos sobre os serviços do sistema"
+        - name: "DOCKER | Coleta os fatos sobre os serviços do sistema"
           ansible.builtin.service_facts:
 
-        - name: "ROLLBACK | Para e desabilita os serviços do Docker (se existirem)"
+        - name: "DOCKER | Para e desabilita os serviços do Docker (se existirem)"
           become: true
           ansible.builtin.systemd:
             name: "{{ item }}"
             state: stopped
             enabled: no
           loop:
-            - docker.service
-            - docker.socket
-            - containerd.service
+            - "{{ docker_service }}"
           when: item in ansible_facts.services
 
-        - name: "ROLLBACK | Remove o grupo 'docker'"
+        - name: "DOCKER | Remove o grupo 'docker'"
           become: true
           ansible.builtin.group:
             name: docker
             state: absent
 
-        - name: "ROLLBACK | Remove os pacotes do Docker e seus componentes"
+        - name: "DOCKER | Remove os pacotes do Docker e seus componentes"
           become: true
           ansible.builtin.apt:
             name: "{{ packages_docker }}"
@@ -93,19 +92,19 @@
             purge: true
             autoremove: yes
 
-        - name: "ROLLBACK | Remove o arquivo de repositório do Docker"
+        - name: "DOCKER | Remove o arquivo de repositório do Docker"
           become: true
           ansible.builtin.file:
             path: /etc/apt/sources.list.d/docker.list
             state: absent
 
-        - name: "ROLLBACK | Remove a chave GPG do Docker"
+        - name: "DOCKER | Remove a chave GPG do Docker"
           become: true
           ansible.builtin.file:
             path: /etc/apt/keyrings/docker.gpg
             state: absent
 
-        - name: "ROLLBACK | Remove o diretório de dados do Docker (ATENÇÃO: AÇÃO DESTRUTIVA)"
+        - name: "DOCKER | Remove o diretório de dados do Docker (ATENÇÃO: AÇÃO DESTRUTIVA)"
           become: true
           ansible.builtin.file:
             path: /var/lib/docker
@@ -149,9 +148,28 @@
             state: absent
           loop: "{{ kubernetes_bin_path }}"
 
-    - name: "ROLLBACK | Atualiza o cache do APT e remove dependências não utilizadas"
-      become: true
-      ansible.builtin.apt:
-        update_cache: yes
-        autoremove: yes
-      ignore_errors: true
+    - name: "ROLLBACK | Reverte a instalação dos servidores web"
+      block:
+      - name: "WEB_SERVERS | Atualiza o cache de pacotes antes da remoção"
+        become: true
+        ansible.builtin.apt:
+          update_cache: true
+
+      - name: "WEB_SERVERS | Remove os servidores web instalados"
+        become: true
+        ansible.builtin.apt:
+          name: "{{ web_servers_install }}"
+          state: absent
+          purge: true
+
+    - name: "ROLLBACK | Limpeza completa do APT"
+      block:
+      - name: "ROLLBACK | Remove pacotes não utilizados"
+        become: true
+        ansible.builtin.apt:
+          autoremove: true
+
+      - name: "ROLLBACK | Limpa os diretórios de cache do APT"
+        become: true
+        ansible.builtin.apt:
+          autoclean: true
