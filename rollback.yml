@@ -26,9 +26,16 @@
 
   vars_files:
     - "roles/packages_optional/defaults/main.yml"
+    - "roles/oh_my_zsh/defaults/main.yml"
     - "roles/docker_container/defaults/main.yml"
     - "roles/kubernetes_orchestration/defaults/main.yml"
     - "roles/web_servers/defaults/main.yml"
+    - "roles/database_sql/defaults/main.yml"
+
+  pre_tasks:
+    - name: "SETUP | Recolhe factos sobre os serviços do sistema"
+      become: true
+      ansible.builtin.service_facts:
 
   tasks:
     - name: "SEGURANCA | Muda o shell padrão para BASH"
@@ -40,136 +47,141 @@
     - name: "PACKAGES | Reverte a instalação dos pacotes opcionais"
       become: true
       ansible.builtin.apt:
-        name: "{{ optional_packages }}"
+        name: "{{ item }}"
         state: absent
         purge: true
+      ignore_errors: true
+      loop: "{{ optional_packages_purge }}"
 
-    - name: "OhMyZSH | Reverte a instalação e configuração do Oh My Zsh"
+    - name: "SHELL | Reverte a instalação e configuração do Oh My Zsh"
       block:
         - name: Remove arquivos e diretórios do Zsh
           ansible.builtin.file:
             path: "{{ item }}"
             state: absent
-          loop:
-            - "/home/{{ ansible_user_id }}/.oh-my-zsh"
-            - "/home/{{ ansible_user_id }}/.zshrc"
-            - "/home/{{ ansible_user_id }}/.zsh_history"
-            - "/home/{{ ansible_user_id }}/.p10k.zsh"
+          loop: "{{ oh_my_zsh_paths_to_remove }}"
 
-        - name: Desinstala o pacote zsh
+        - name: Desinstala os pacotes de shell
           become: true
           ansible.builtin.apt:
-            name: zsh
+            name: "{{ zsh_packages }}"
             state: absent
             purge: true
+      ignore_errors: true
 
-    - name: "ROLLBACK | Reverte a instalação e configuração do Docker"
+    - name: "DOCKER | Reverte a instalação e configuração completa"
       block:
-        - name: "DOCKER | Coleta os fatos sobre os serviços do sistema"
-          ansible.builtin.service_facts:
-
-        - name: "DOCKER | Para e desabilita os serviços do Docker (se existirem)"
+        - name: Para e desabilita os serviços (se existirem)
           become: true
           ansible.builtin.systemd:
             name: "{{ item }}"
             state: stopped
             enabled: no
-          loop:
-            - "{{ docker_service }}"
+          loop: "{{ docker_service }}"
           when: item in ansible_facts.services
 
-        - name: "DOCKER | Remove o grupo 'docker'"
-          become: true
-          ansible.builtin.group:
-            name: docker
-            state: absent
-
-        - name: "DOCKER | Remove os pacotes do Docker e seus componentes"
+        - name: Remove os pacotes
           become: true
           ansible.builtin.apt:
             name: "{{ packages_docker }}"
             state: absent
             purge: true
-            autoremove: yes
-
-        - name: "DOCKER | Remove o arquivo de repositório do Docker"
+        
+        - name: Remove o grupo 'docker'
           become: true
-          ansible.builtin.file:
-            path: /etc/apt/sources.list.d/docker.list
+          ansible.builtin.group:
+            name: docker
             state: absent
-
-        - name: "DOCKER | Remove a chave GPG do Docker"
-          become: true
-          ansible.builtin.file:
-            path: /etc/apt/keyrings/docker.gpg
-            state: absent
-
-        - name: "DOCKER | Remove o diretório de dados do Docker (ATENÇÃO: AÇÃO DESTRUTIVA)"
-          become: true
-          ansible.builtin.file:
-            path: /var/lib/docker
-            state: absent
-
-    - name: "ROLLBACK | Reverte a instalação completa do ecossistema Kubernetes"
-      block:
-        - name: "KUBERNETES | Remove arquivos de configuração e cache do Helm"
-          ansible.builtin.file:
-            path: "{{ item }}"
-            state: absent
-          loop:
-            - "/home/{{ ansible_user_id }}/.config/helm"
-            - "/home/{{ ansible_user_id }}/.cache/helm"
-
-        - name: "KUBERNETES | Remove os pacotes do Kubernetes (usando dpkg)"
-          become: true
-          ansible.builtin.command:
-            cmd: "dpkg --purge {{ item }}"
-          loop: "{{ kubernetes_packages }}"
-          register: dpkg_purge_result
-          changed_when: "'purging' in dpkg_purge_result.stdout"
-          ignore_errors: true
-
-        - name: "KUBERNETES | Remove o arquivo de repositório APT do Kubernetes"
-          become: true
-          ansible.builtin.file:
-            path: /etc/apt/sources.list.d/kubernetes.list
-            state: absent
-
-        - name: "KUBERNETES | Remove a chave GPG do repositório Kubernetes"
-          become: true
-          ansible.builtin.file:
-            path: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-            state: absent
-
-        - name: "KUBERNETES | Remove os binários (minikube, helm, k9s)"
+        
+        - name: Remove diretórios e configurações
           become: true
           ansible.builtin.file:
             path: "{{ item }}"
             state: absent
-          loop: "{{ kubernetes_bin_path }}"
+          loop: "{{ docker_paths_to_remove }}"
 
-    - name: "ROLLBACK | Reverte a instalação dos servidores web"
+      ignore_errors: true
+
+    - name: "KUBERNETES | Reverte a instalação completa do ecossistema"
       block:
-      - name: "WEB_SERVERS | Atualiza o cache de pacotes antes da remoção"
-        become: true
-        ansible.builtin.apt:
-          update_cache: true
+        - name: Remove os pacotes (incluindo 'held')
+          become: true
+          ansible.builtin.apt:
+            name: "{{ kubernetes_packages }}"
+            state: absent
+            purge: true
+            allow_change_held_packages: true
 
-      - name: "WEB_SERVERS | Remove os servidores web instalados"
-        become: true
-        ansible.builtin.apt:
-          name: "{{ web_servers_install }}"
-          state: absent
-          purge: true
+        - name: Remove binários e configurações
+          become: true
+          ansible.builtin.file:
+            path: "{{ item }}"
+            state: absent
+          loop: "{{ kubernetes_paths_to_remove }}"
 
-    - name: "ROLLBACK | Limpeza completa do APT"
+      ignore_errors: true
+
+    - name: "WEB SERVERS | Reverte a instalação completa"
       block:
-      - name: "ROLLBACK | Remove pacotes não utilizados"
-        become: true
-        ansible.builtin.apt:
-          autoremove: true
+        - name: Para e desabilita os serviços (se existirem)"
+          become: true
+          ansible.builtin.service:
+            name: "{{ item }}"
+            state: stopped
+            enabled: no
+          loop: "{{ web_servers_services }}"
+          when: item in ansible_facts.services
 
-      - name: "ROLLBACK | Limpa os diretórios de cache do APT"
-        become: true
-        ansible.builtin.apt:
-          autoclean: true
+        - name: Remove os pacotes
+          become: true
+          ansible.builtin.apt:
+            name: "{{ web_servers_packages }}"
+            state: absent
+            purge: true
+            
+        - name: Remove arquivos e diretórios residuais
+          become: true
+          ansible.builtin.file:
+            path: "{{ item }}"
+            state: absent
+          loop: "{{ web_servers_paths_to_remove }}"
+
+      ignore_errors: true
+    
+    - name: "DATABASES | Reverte a instalação completa"
+      block:
+        - name: Para e desabilita os serviços (se existirem)
+          become: true
+          ansible.builtin.service:
+            name: "{{ item }}"
+            state: stopped
+            enabled: no
+          loop: "{{ database_sql_services }}"
+          when: item in ansible_facts.services
+
+        - name: Remove os pacotes
+          become: true
+          ansible.builtin.apt:
+            name: "{{ database_sql_packages }}"
+            state: absent
+            purge: true
+
+        - name: Remove diretórios de dados e logs
+          become: true
+          ansible.builtin.file:
+            path: "{{ item }}"
+            state: absent
+          loop: "{{ database_sql_paths_to_remove }}"
+
+      ignore_errors: true
+
+    - name: "CLEANUP | Remove pacotes não utilizados e limpa o cache do APT"
+      become: true
+      ansible.builtin.apt:
+        autoremove: true
+        autoclean: true
+
+    - name: "SYSTEM | Força o recarregamento do daemon do systemd"
+      become: true
+      ansible.builtin.systemd:
+        daemon_reload: yes
