@@ -1,0 +1,27 @@
+---
+# Versões do Kubernetes
+kubernetes_version: "1.31"
+
+# Versões das ferramentas
+helm_version: "3.15.2"
+k9s_version: "0.32.5"
+
+# Pacotes Kubernetes a serem instalados
+kubernetes_packages:
+  - kubelet
+  - kubeadm
+  - kubectl
+
+kubernetes_paths_to_remove:
+  # Binários instalados manualmente
+  - /usr/local/bin/minikube
+  - /usr/local/bin/helm
+  - /usr/local/bin/k9s
+  # Configurações do Helm
+  - /home/{{ ansible_user_id }}/.config/helm
+  - /home/{{ ansible_user_id }}/.cache/helm
+  # Ficheiros de repositório e chaves do APT
+  - /etc/apt/sources.list.d/kubernetes.list
+  - /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+  # Diretório de configuração do Kubernetes
+  - /etc/kubernetes
