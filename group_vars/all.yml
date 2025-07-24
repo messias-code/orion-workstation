@@ -16,3 +16,5 @@ setup:
   kubernetes_orchestration: true
   # --- Instalação dos Web Servers ---
   web_servers: true
+  # --- Instalação dos bancos de dados SQL ---
+  database_sql: true
