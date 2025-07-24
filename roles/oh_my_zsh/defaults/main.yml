@@ -13,3 +13,10 @@ zsh_packages:
 # Pode ser alterado para outro tema do Powerlevel10k ou outro tema de sua preferencia.
 # Exemplo: "agnoster", "robbyrussell", etc.
 zsh_theme_name: "powerlevel10k/powerlevel10k"
+
+oh_my_zsh_paths_to_remove:
+  - /home/{{ ansible_user_id }}/.oh-my-zsh
+  - /home/{{ ansible_user_id }}/.zshrc
+  - /home/{{ ansible_user_id }}/.zsh_history
+  - /home/{{ ansible_user_id }}/.p10k.zsh
+  - ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting

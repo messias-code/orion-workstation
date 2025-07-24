@@ -39,7 +39,7 @@
     owner: root
     group: root
     mode: "0644"
-  notify: Restart containerd
+  notify: Reiniciar containerd
 
 - name: "KUBERNETES | Instalar Helm"
   become: true
