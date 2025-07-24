@@ -95,7 +95,7 @@ Este projeto está em constante evolução para oferecer um ambiente DevOps cada
 - [x] Containerização: Docker Engine e Docker Compose v2
 - [x] Orquestração e Ferramentas Kubernetes: `kubectl`, `kubelet`, `kubeadm`, `minikube`, `helm`, `k9s`
 - [x] Servidores Web Populares: `nginx`, `apache2`
-- [ ] Bancos de Dados Essenciais: `PostgreSQL`, `MongoDB`, `MySQL`
+- [x] Bancos de Dados Essenciais: `PostgreSQL`, `MySQL`
 - [ ] Monitoramento e Observabilidade: `Prometheus`, `Grafana`, `Zabbix`, `Kafka`, `RabbitMQ`
 - [ ] Infraestrutura como Código: `OpenTofu`, `Terraform`, `Puppet`
 - [ ] CLIs de Nuvem: `Azure CLI`, `AWS CLI`, `Google Cloud CLI`
@@ -129,8 +129,8 @@ O playbook automatiza as seguintes configurações e instalações essenciais pa
 6. **Servidores Web**
     - Instalação do nginx e apache2
 
-7. **Bancos de Dados** _(em desenvolvimento)_
-    - Instalação do PostgreSQL, MongoDB e MySQL
+7. **Bancos de Dados**
+    - Instalação do PostgreSQL e MySQL
 
 8. **Monitoramento e Observabilidade** _(em desenvolvimento)_
     - Instalação do Prometheus, Grafana, Zabbix, Kafka e RabbitMQ
