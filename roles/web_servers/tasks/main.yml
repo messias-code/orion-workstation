@@ -7,12 +7,9 @@
 - name: "WEB SERVERS | Instala os pacotes de servidores web selecionados"
   become: true
   ansible.builtin.apt:
-    name: "{{ item }}"
+    name: "{{ web_servers_packages }}"
     state: present
     update_cache: yes
-  loop: "{{ web_servers_install }}"
-  loop_control:
-    label: "{{ item }}"
 
 - name: "WEB SERVERS | Garante que os serviços instalados estejam parados e desabilitados"
   become: true
@@ -20,6 +17,4 @@
     name: "{{ item }}"
     state: stopped
     enabled: no
-  loop: "{{ web_servers_install }}"
-  loop_control:
-    label: "{{ item }}"
+  loop: "{{ web_servers_services }}"
