@@ -73,12 +73,7 @@ A documentação detalha cada funcionalidade, pré-requisitos e instruções par
 │   │   │   └── main.yml
 │   │   └── tasks
 │   │       └── main.yml
-│   ├── update_system
-│   │   └── tasks
-│   │       └── main.yml
-│   └── web_servers
-│       ├── defaults
-│       │   └── main.yml
+│   └── update_system
 │       └── tasks
 │           └── main.yml
 ├── rollback.yml
@@ -94,12 +89,8 @@ Este projeto está em constante evolução para oferecer um ambiente DevOps cada
 - [x] Terminal Moderno: Instalação e Customização com Oh-My-ZSH, Powerlevel10k e Plugins
 - [x] Containerização: Docker Engine e Docker Compose v2
 - [x] Orquestração e Ferramentas Kubernetes: `kubectl`, `kubelet`, `kubeadm`, `minikube`, `helm`, `k9s`
-- [x] Servidores Web Populares: `nginx`, `apache2`
-- [x] Bancos de Dados Essenciais: `PostgreSQL`, `MySQL`
-- [ ] Monitoramento e Observabilidade: `Prometheus`, `Grafana`, `Zabbix`, `Kafka`, `RabbitMQ`
 - [ ] Infraestrutura como Código: `OpenTofu`, `Terraform`, `Puppet`
 - [ ] CLIs de Nuvem: `Azure CLI`, `AWS CLI`, `Google Cloud CLI`
-- [ ] CI/CD Integração e Entrega Contínua: Jenkins
 
 > 🔄 *Este projeto está em desenvolvimento ativo. Novas funcionalidades e melhorias são adicionadas regularmente. Contribuições e sugestões são bem-vindas!*
 
@@ -126,23 +117,11 @@ O playbook automatiza as seguintes configurações e instalações essenciais pa
 5. **Orquestração e ferramentas Kubernetes**
     - Instalação do kubectl, kubelet, kubeadm, minikube, helm e k9s
 
-6. **Servidores Web**
-    - Instalação do nginx e apache2
-
-7. **Bancos de Dados**
-    - Instalação do PostgreSQL e MySQL
-
-8. **Monitoramento e Observabilidade** _(em desenvolvimento)_
-    - Instalação do Prometheus, Grafana, Zabbix, Kafka e RabbitMQ
-
-9. **Infraestrutura como Código** _(em desenvolvimento)_
+6. **Infraestrutura como Código** _(em desenvolvimento)_
     - Instalação do Terraform, OpenTofu e Puppet
 
-10. **Ferramentas de Cloud CLI** _(em desenvolvimento)_
+7. **Ferramentas de Cloud CLI** _(em desenvolvimento)_
     - Instalação do AWS CLI, Azure CLI e Google Cloud CLI
-
-11. **CI/CD (Integração e Entrega Contínua)** _(em desenvolvimento)_
-    - Instalação do servidor Jenkins
 
 
 > Todas as etapas são opcionais e podem ser customizadas conforme a necessidade do usuário, garantindo flexibilidade e padronização do ambiente.

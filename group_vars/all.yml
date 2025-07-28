@@ -14,7 +14,3 @@ setup:
   docker_container: true
   # --- Instalação do Kubernetes ---
   kubernetes_orchestration: true
-  # --- Instalação dos Web Servers ---
-  web_servers: true
-  # --- Instalação dos bancos de dados SQL ---
-  database_sql: true

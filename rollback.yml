@@ -29,8 +29,6 @@
     - "roles/oh_my_zsh/defaults/main.yml"
     - "roles/docker_container/defaults/main.yml"
     - "roles/kubernetes_orchestration/defaults/main.yml"
-    - "roles/web_servers/defaults/main.yml"
-    - "roles/database_sql/defaults/main.yml"
 
   pre_tasks:
     - name: "SETUP | Recolhe factos sobre os serviços do sistema"
@@ -118,60 +116,6 @@
             path: "{{ item }}"
             state: absent
           loop: "{{ kubernetes_paths_to_remove }}"
-
-      ignore_errors: true
-
-    - name: "WEB SERVERS | Reverte a instalação completa"
-      block:
-        - name: Para e desabilita os serviços (se existirem)"
-          become: true
-          ansible.builtin.service:
-            name: "{{ item }}"
-            state: stopped
-            enabled: no
-          loop: "{{ web_servers_services }}"
-          when: item in ansible_facts.services
-
-        - name: Remove os pacotes
-          become: true
-          ansible.builtin.apt:
-            name: "{{ web_servers_packages }}"
-            state: absent
-            purge: true
-            
-        - name: Remove arquivos e diretórios residuais
-          become: true
-          ansible.builtin.file:
-            path: "{{ item }}"
-            state: absent
-          loop: "{{ web_servers_paths_to_remove }}"
-
-      ignore_errors: true
-    
-    - name: "DATABASES | Reverte a instalação completa"
-      block:
-        - name: Para e desabilita os serviços (se existirem)
-          become: true
-          ansible.builtin.service:
-            name: "{{ item }}"
-            state: stopped
-            enabled: no
-          loop: "{{ database_sql_services }}"
-          when: item in ansible_facts.services
-
-        - name: Remove os pacotes
-          become: true
-          ansible.builtin.apt:
-            name: "{{ database_sql_packages }}"
-            state: absent
-            purge: true
-
-        - name: Remove diretórios de dados e logs
-          become: true
-          ansible.builtin.file:
-            path: "{{ item }}"
-            state: absent
-          loop: "{{ database_sql_paths_to_remove }}"
 
       ignore_errors: true
 

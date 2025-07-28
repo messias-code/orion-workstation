@@ -106,14 +106,6 @@ def main():
     resultados_finais.append(verificar("Comando 'k9s'", 'comando', 'k9s', condicao))
     resultados_finais.append(verificar("Chave GPG do Kubernetes", 'caminho', '/etc/apt/keyrings/kubernetes-apt-keyring.gpg', condicao))
     resultados_finais.append(verificar("Repositório APT do Kubernetes", 'caminho', '/etc/apt/sources.list.d/kubernetes.list', condicao))
-    
-    # 5. Servidores Web
-    resultados_finais.append(verificar("Serviço 'nginx.service'", 'servico', 'nginx.service', condicao))
-    resultados_finais.append(verificar("Serviço 'apache2.service'", 'servico', 'apache2.service', condicao))
-    
-    # 6. Bancos de Dados SQL
-    resultados_finais.append(verificar("Serviço 'postgresql.service'", 'servico', 'postgresql.service', condicao))
-    resultados_finais.append(verificar("Serviço 'mysql.service'", 'servico', 'mysql.service', condicao))
 
     exibir_relatorio(titulo, resultados_finais)
 
