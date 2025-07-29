@@ -1,0 +1,97 @@
+---
+# Esta tarefa Ansible instala e configura as ferramentas de IaC (Infrastructure as Code)
+# Terraform e OpenTofu no sistema, seguindo as diretrizes oficiais dos fornecedores.
+#
+# Tarefas:
+# - "Instalar dependências":
+#     Garante que pacotes como 'gpg' e 'software-properties-common' estejam presentes.
+# - "Instalação do Terraform":
+#     Executa os comandos exatos da documentação da HashiCorp para adicionar a chave GPG
+#     e o repositório, garantindo máxima compatibilidade.
+# - "Instalação do OpenTofu":
+#     Segue o processo oficial e robusto para instalar o OpenTofu, incluindo a gestão
+#     de suas duas chaves GPG específicas.
+#
+# Todas as tarefas utilizam privilégio de superusuário (become: true) para
+# gerenciar pacotes e configurações do sistema de forma segura.
+
+- name: "IAC | Instalar dependências"
+  become: true
+  ansible.builtin.apt:
+    name:
+      - gnupg
+      - software-properties-common
+      - curl
+      - wget
+    state: present
+    update_cache: true
+
+# --- Instalação do Terraform ---
+- name: "TERRAFORM | Baixar e instalar a chave GPG da HashiCorp (método oficial)"
+  become: true
+  ansible.builtin.shell:
+    cmd: >
+      wget -O- https://apt.releases.hashicorp.com/gpg |
+      gpg --dearmor |
+      tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
+  args:
+    # Esta tarefa só será executada se o ficheiro de chave não existir.
+    creates: /usr/share/keyrings/hashicorp-archive-keyring.gpg
+
+- name: "TERRAFORM | Adicionar o repositório da HashiCorp (método oficial)"
+  become: true
+  ansible.builtin.shell:
+    cmd: >
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" |
+      tee /etc/apt/sources.list.d/hashicorp.list
+  args:
+    # Esta tarefa só será executada se o ficheiro de repositório não existir.
+    creates: /etc/apt/sources.list.d/hashicorp.list
+
+- name: "TERRAFORM | Instalar Terraform"
+  become: true
+  ansible.builtin.apt:
+    name: terraform
+    state: present
+    update_cache: true
+
+# --- Instalação do OpenTofu ---
+- name: "OPENTOFU | Garantir que o diretório de keyrings exista"
+  become: true
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+
+- name: "OPENTOFU | Instalar a primeira chave GPG (método oficial)"
+  become: true
+  ansible.builtin.shell:
+    cmd: curl -fsSL https://get.opentofu.org/opentofu.gpg | tee /etc/apt/keyrings/opentofu.gpg >/dev/null
+  args:
+    # Esta tarefa só será executada se o ficheiro de chave não existir.
+    creates: /etc/apt/keyrings/opentofu.gpg
+
+- name: "OPENTOFU | Instalar a segunda chave GPG (método oficial)"
+  become: true
+  ansible.builtin.shell:
+    cmd: curl -fsSL https://packages.opentofu.org/opentofu/tofu/gpgkey | gpg --no-tty --batch --dearmor -o /etc/apt/keyrings/opentofu-repo.gpg
+  args:
+    # Esta tarefa só será executada se o ficheiro de chave não existir.
+    creates: /etc/apt/keyrings/opentofu-repo.gpg
+
+- name: "OPENTOFU | Adicionar o repositório (método oficial)"
+  become: true
+  ansible.builtin.shell:
+    cmd: >
+      echo "deb [signed-by=/etc/apt/keyrings/opentofu.gpg,/etc/apt/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main" |
+      tee /etc/apt/sources.list.d/opentofu.list
+  args:
+    # Esta tarefa só será executada se o ficheiro de repositório não existir.
+    creates: /etc/apt/sources.list.d/opentofu.list
+
+- name: "OPENTOFU | Instalar OpenTofu"
+  become: true
+  ansible.builtin.apt:
+    name: tofu
+    state: present
+    update_cache: true

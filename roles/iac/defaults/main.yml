@@ -1,0 +1,17 @@
+---
+# Este arquivo define as variáveis padrão para a role de IaC (Infrastructure as Code).
+#
+# iac_paths_to_remove:
+#   Lista de arquivos, binários e diretórios de configuração que serão
+#   removidos durante o processo de rollback para garantir uma limpeza completa.
+
+# Binários e configurações a serem removidos no rollback
+iac_paths_to_remove:
+  - /usr/local/bin/terraform
+  - /usr/local/bin/tofu
+  - /etc/apt/sources.list.d/opentofu.list
+  - /usr/share/keyrings/opentofu-keyring.gpg
+  - /etc/apt/sources.list.d/hashicorp.list
+  - /usr/share/keyrings/hashicorp-archive-keyring.gpg
+  - /etc/apt/keyrings/opentofu.gpg
+  - /etc/apt/keyrings/opentofu-repo.gpg
