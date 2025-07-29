@@ -1,4 +1,19 @@
 ---
+# Este arquivo define as variáveis padrão para a role de orquestração do Kubernetes.
+#
+# kubernetes_version:
+#   Define a versão dos componentes do Kubernetes (kubelet, kubeadm, kubectl) a ser instalada.
+#
+# helm_version / k9s_version:
+#   Especifica as versões das ferramentas do ecossistema, como Helm e k9s.
+#
+# kubernetes_packages:
+#   Lista os pacotes essenciais do Kubernetes que serão gerenciados pelo APT.
+#
+# kubernetes_paths_to_remove:
+#   Define uma lista de arquivos, binários e diretórios de configuração que
+#   serão removidos durante o processo de rollback para uma limpeza completa.
+
 # Versões do Kubernetes
 kubernetes_version: "1.31"
 

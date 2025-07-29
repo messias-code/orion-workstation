@@ -1,13 +1,24 @@
 ---
-# Esta tarefa Ansible instala e configura componentes essenciais do Kubernetes no sistema.
+# Esta tarefa Ansible instala e configura o ecossistema Kubernetes,
+# incluindo o container runtime (containerd), ferramentas de gerenciamento
+# e os componentes principais do Kubernetes.
 #
 # Tarefas:
-# - "Instalação dos componentes principais do Kubernetes":
-#     Instala kubeadm, kubelet e kubectl para orquestração de clusters Kubernetes,
-# - "Inicialização do cluster Kubernetes (opcional)":
-#     Inicializa o cluster usando kubeadm, se necessário,
+# - "Instalação e configuração do containerd":
+#     Instala o containerd, cria seu diretório de configuração e aplica
+#     as configurações padrão, notificando o reinício do serviço.
+# - "Instalação de ferramentas (Helm, k9s, Minikube)":
+#     Baixa e instala os binários de ferramentas essenciais como Helm,
+#     k9s e Minikube diretamente no /usr/local/bin.
+# - "Configuração do repositório APT do Kubernetes":
+#     Adiciona a chave GPG e o repositório oficial do Kubernetes para
+#     permitir a instalação dos pacotes via APT.
+# - "Instalação dos pacotes Kubernetes":
+#     Instala kubelet, kubeadm e kubectl a partir do repositório configurado
+#     e os marca como 'hold' para evitar atualizações automáticas indesejadas.
 #
-# Todas as tarefas utilizam privilégio de superusuário (become: true) e seguem as recomendações oficiais do Kubernetes.
+# Todas as tarefas utilizam privilégio de superusuário (become: true)
+# para garantir uma instalação segura e correta no sistema.
 
 - name: "KUBERNETES | Instalação do containerd"
   become: true

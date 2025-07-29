@@ -1,7 +1,14 @@
-# Manipuladores para o papel de orquestração do Ansible.
-# Este arquivo contém tarefas que são acionadas por instruções notify.
-
 ---
+# Este handler Ansible é responsável por reiniciar o serviço containerd.
+#
+# Handler:
+# - "Reiniciar containerd":
+#     Esta tarefa é acionada por uma notificação (geralmente após uma
+#     alteração em seu arquivo de configuração) e garante que o serviço
+#     containerd seja reiniciado para aplicar as novas configurações.
+#
+# O handler utiliza privilégio de superusuário (become: true) para gerenciar o serviço.
+
 - name: Reiniciar containerd
   become: true
   ansible.builtin.service:
