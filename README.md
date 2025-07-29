@@ -56,6 +56,11 @@ A documentação detalha cada funcionalidade, pré-requisitos e instruções par
 │   │   │   └── main.yml
 │   │   └── tasks
 │   │       └── main.yml
+│   ├── iac
+│   │   ├── defaults
+│   │   │   └── main.yml
+│   │   └── tasks
+│   │       └── main.yml
 │   ├── kubernetes_orchestration
 │   │   ├── defaults
 │   │   │   └── main.yml
@@ -89,7 +94,7 @@ Este projeto está em constante evolução para oferecer um ambiente DevOps cada
 - [x] Terminal Moderno: Instalação e Customização com Oh-My-ZSH, Powerlevel10k e Plugins
 - [x] Containerização: Docker Engine e Docker Compose v2
 - [x] Orquestração e Ferramentas Kubernetes: `kubectl`, `kubelet`, `kubeadm`, `minikube`, `helm`, `k9s`
-- [ ] Infraestrutura como Código: `OpenTofu`, `Terraform`, `Puppet`
+- [x] Infraestrutura como Código: `Terraform` e `OpenTofu`
 - [ ] CLIs de Nuvem: `Azure CLI`, `AWS CLI`, `Google Cloud CLI`
 
 > 🔄 *Este projeto está em desenvolvimento ativo. Novas funcionalidades e melhorias são adicionadas regularmente. Contribuições e sugestões são bem-vindas!*
@@ -117,8 +122,8 @@ O playbook automatiza as seguintes configurações e instalações essenciais pa
 5. **Orquestração e ferramentas Kubernetes**
     - Instalação do kubectl, kubelet, kubeadm, minikube, helm e k9s
 
-6. **Infraestrutura como Código** _(em desenvolvimento)_
-    - Instalação do Terraform, OpenTofu e Puppet
+6. **Infraestrutura como Código**
+    - Instalação do Terraform e OpenTofu
 
 7. **Ferramentas de Cloud CLI** _(em desenvolvimento)_
     - Instalação do AWS CLI, Azure CLI e Google Cloud CLI
