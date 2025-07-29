@@ -56,12 +56,12 @@ def verificar(descricao, tipo, valor, condicao):
 def exibir_relatorio(titulo, resultados):
     """Exibe o relatório de verificação formatado."""
     print(f"\n---- INICIANDO VERIFICAÇÃO DE {titulo} ----")
-    print("-" * 80)
-    print(f"{'COMPONENTE':<45} | {'STATUS':<13} | {'DETALHE':<15} |")
-    print("-" * 80)
+    print("-" * 90)
+    print(f"{'COMPONENTE':<55} | {'STATUS':<13} | {'DETALHE':<15} |")
+    print("-" * 90)
     for i in resultados:
-        print(f"{i['descricao']:<45} | {i['status']:<12} | {i['detalhe']:<15} |")
-    print("-" * 80)
+        print(f"{i['descricao']:<55} | {i['status']:<12} | {i['detalhe']:<15} |")
+    print("-" * 90)
     print("---- Verificação Concluída ----\n")
 
 # --- Função Principal ---
@@ -69,7 +69,7 @@ def exibir_relatorio(titulo, resultados):
 def main():
     if len(sys.argv) < 2 or sys.argv[1] not in ["install", "rollback"]:
         print("Erro: Você precisa especificar o modo de operação.")
-        print(f"Uso: python {sys.argv[0]} [install|rollback]")
+        print(f"Uso: python3 {sys.argv[0]} [install|rollback]")
         return
 
     modo = sys.argv[1]
@@ -81,31 +81,29 @@ def main():
     # 1. Terminal Moderno (Oh My Zsh)
     resultados_finais.append(verificar("Comando 'zsh'", 'comando', 'zsh', condicao))
     resultados_finais.append(verificar("Diretório '~/.oh-my-zsh'", 'caminho', '~/.oh-my-zsh', condicao))
-    resultados_finais.append(verificar("Arquivo de configuração '~/.zshrc'", 'caminho', '~/.zshrc', condicao))
-    resultados_finais.append(verificar("Tema Powerlevel10k '~/.p10k.zsh'", 'caminho', '~/.p10k.zsh', condicao))
 
     # 2. Pacotes Opcionais
     resultados_finais.append(verificar("Comando 'nvim' (Neovim)", 'comando', 'nvim', condicao))
     resultados_finais.append(verificar("Comando 'tree'", 'comando', 'tree', condicao))
-    resultados_finais.append(verificar("Comando 'pandoc'", 'comando', 'pandoc', condicao))
-    resultados_finais.append(verificar("Comando 'pdflatex' (do Texlive)", 'comando', 'pdflatex', condicao))
-
+    
     # 3. Containerização (Docker)
     resultados_finais.append(verificar("Comando 'docker'", 'comando', 'docker', condicao))
-    resultados_finais.append(verificar("Serviço 'containerd.service'", 'servico', 'containerd.service', condicao))
     resultados_finais.append(verificar("Serviço 'docker.service'", 'servico', 'docker.service', condicao))
-    resultados_finais.append(verificar("Chave GPG do Docker", 'caminho', '/etc/apt/keyrings/docker.gpg', condicao))
     resultados_finais.append(verificar("Repositório APT do Docker", 'caminho', '/etc/apt/sources.list.d/docker.list', condicao))
 
     # 4. Orquestração (Kubernetes)
     resultados_finais.append(verificar("Comando 'kubectl'", 'comando', 'kubectl', condicao))
-    resultados_finais.append(verificar("Comando 'kubeadm'", 'comando', 'kubeadm', condicao))
-    resultados_finais.append(verificar("Serviço 'kubelet.service'", 'servico', 'kubelet.service', condicao))
-    resultados_finais.append(verificar("Comando 'helm'", 'comando', 'helm', condicao))
     resultados_finais.append(verificar("Comando 'minikube'", 'comando', 'minikube', condicao))
-    resultados_finais.append(verificar("Comando 'k9s'", 'comando', 'k9s', condicao))
-    resultados_finais.append(verificar("Chave GPG do Kubernetes", 'caminho', '/etc/apt/keyrings/kubernetes-apt-keyring.gpg', condicao))
     resultados_finais.append(verificar("Repositório APT do Kubernetes", 'caminho', '/etc/apt/sources.list.d/kubernetes.list', condicao))
+
+    # 5. Infraestrutura como Código (IaC)
+    resultados_finais.append(verificar("Comando 'terraform'", 'comando', 'terraform', condicao))
+    resultados_finais.append(verificar("Repositório do Terraform", 'caminho', '/etc/apt/sources.list.d/hashicorp.list', condicao))
+    resultados_finais.append(verificar("Chave GPG do Terraform", 'caminho', '/usr/share/keyrings/hashicorp-archive-keyring.gpg', condicao))
+    resultados_finais.append(verificar("Comando 'tofu'", 'comando', 'tofu', condicao))
+    resultados_finais.append(verificar("Repositório do OpenTofu", 'caminho', '/etc/apt/sources.list.d/opentofu.list', condicao))
+    resultados_finais.append(verificar("Chave GPG 1 do OpenTofu", 'caminho', '/etc/apt/keyrings/opentofu.gpg', condicao))
+    resultados_finais.append(verificar("Chave GPG 2 do OpenTofu", 'caminho', '/etc/apt/keyrings/opentofu-repo.gpg', condicao))
 
     exibir_relatorio(titulo, resultados_finais)
 
