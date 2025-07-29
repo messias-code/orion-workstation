@@ -4,6 +4,7 @@
 # zsh_packages:
 #   Estes pacotes são essenciais para uma instalação moderna do ZSH, incluindo
 #   o shell, o utilitário de download (curl) e o controle de versões (git).
+
 zsh_packages:
   - zsh
   - curl
