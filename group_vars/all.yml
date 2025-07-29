@@ -14,3 +14,5 @@ setup:
   docker_container: true
   # --- Instalação do Kubernetes ---
   kubernetes_orchestration: true
+  # --- Instalação das ferramentas de Infraestrutura como Código (IaC) ---
+  iac: true
