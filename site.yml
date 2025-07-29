@@ -26,7 +26,5 @@
       when: setup.docker_container | bool
     - role: kubernetes_orchestration
       when: setup.kubernetes_orchestration | bool
-    - role: web_servers
-      when: setup.web_servers | bool
-    - role: database_sql
-      when: setup.database_sql | bool
+    - role: iac
+      when: setup.iac | bool
