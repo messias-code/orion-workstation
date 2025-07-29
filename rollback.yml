@@ -29,6 +29,7 @@
     - "roles/oh_my_zsh/defaults/main.yml"
     - "roles/docker_container/defaults/main.yml"
     - "roles/kubernetes_orchestration/defaults/main.yml"
+    - "roles/iac/defaults/main.yml"
 
   pre_tasks:
     - name: "SETUP | Recolhe factos sobre os serviços do sistema"
@@ -42,7 +43,7 @@
         name: "{{ ansible_user_id }}"
         shell: /bin/bash
 
-    - name: "PACKAGES | Reverte a instalação dos pacotes opcionais"
+    - name: "PACKAGES | Reverte a instalação do completo ecossistema de pacotes"
       become: true
       ansible.builtin.apt:
         name: "{{ item }}"
@@ -51,7 +52,7 @@
       ignore_errors: true
       loop: "{{ optional_packages_purge }}"
 
-    - name: "SHELL | Reverte a instalação e configuração do Oh My Zsh"
+    - name: "OH MY ZSH | Reverte a instalação e configuração completa do ecossistema"
       block:
         - name: Remove arquivos e diretórios do Zsh
           ansible.builtin.file:
@@ -67,7 +68,7 @@
             purge: true
       ignore_errors: true
 
-    - name: "DOCKER | Reverte a instalação e configuração completa"
+    - name: "DOCKER | Reverte a instalação e configuração completa do ecossistema"
       block:
         - name: Para e desabilita os serviços (se existirem)
           become: true
@@ -116,6 +117,26 @@
             path: "{{ item }}"
             state: absent
           loop: "{{ kubernetes_paths_to_remove }}"
+
+      ignore_errors: true
+
+    - name: "IAC | Reverte a instalação completa do ecossistema"
+      block:
+        - name: Remove os pacotes de IaC
+          become: true
+          ansible.builtin.apt:
+            name:
+              - terraform
+              - tofu
+            state: absent
+            purge: true
+
+        - name: Remove ficheiros de repositório e chaves GPG
+          become: true
+          ansible.builtin.file:
+            path: "{{ item }}"
+            state: absent
+          loop: "{{ iac_paths_to_remove }}"
 
       ignore_errors: true
 
