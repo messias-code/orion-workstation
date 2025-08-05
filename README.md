@@ -20,6 +20,7 @@ _**Feito com ❤️ para otimizar o tempo de desenvolvedores DevOps**_
 - [Instalação](#-instalação)
 - [Configuração do Windows Terminal](#️-configuração-do-windows-terminal)
 - [Uso](#-uso)
+- [Personalização de Instalação](#️-personalização-de-instalação)
 - [Desfazendo as Alterações](#-desfazendo-as-alterações)
 - [Verificação de Modificações](#-verificação-de-modificações)
 - [Variáveis do Sistema](#-variáveis-do-sistema)
@@ -40,49 +41,55 @@ A documentação detalha cada funcionalidade, pré-requisitos e instruções par
 .
 ├── LICENSE
 ├── README.md
+├── anotações.txt
+├── ansible.cfg
 ├── assets
 │   ├── CodeVerso-Academy.jpg
 │   └── Orion-Workstation-Project.jpg
 ├── check_workstation.py
 ├── collections
 │   └── requirements.yml
-├── group_vars
-│   └── all.yml
-├── roles
-│   ├── docker_container
-│   │   ├── defaults
-│   │   │   └── main.yml
-│   │   ├── handlers
-│   │   │   └── main.yml
-│   │   └── tasks
-│   │       └── main.yml
-│   ├── iac
-│   │   ├── defaults
-│   │   │   └── main.yml
-│   │   └── tasks
-│   │       └── main.yml
-│   ├── kubernetes_orchestration
-│   │   ├── defaults
-│   │   │   └── main.yml
-│   │   ├── handlers
-│   │   │   └── main.yml
-│   │   └── tasks
-│   │       └── main.yml
-│   ├── oh_my_zsh
-│   │   ├── defaults
-│   │   │   └── main.yml
-│   │   └── tasks
-│   │       └── main.yml
-│   ├── packages_optional
-│   │   ├── defaults
-│   │   │   └── main.yml
-│   │   └── tasks
-│   │       └── main.yml
-│   └── update_system
-│       └── tasks
-│           └── main.yml
-├── rollback.yml
-└── site.yml
+├── inventory
+│   ├── group_vars
+│   │   ├── all.yml
+│   │   └── vault.yml
+│   └── wsl.yml
+├── playbooks
+│   ├── rollback.yml
+│   └── site.yml
+└── roles
+    ├── docker_container
+    │   ├── defaults
+    │   │   └── main.yml
+    │   ├── handlers
+    │   │   └── main.yml
+    │   └── tasks
+    │       └── main.yml
+    ├── iac
+    │   ├── defaults
+    │   │   └── main.yml
+    │   └── tasks
+    │       └── main.yml
+    ├── kubernetes_orchestration
+    │   ├── defaults
+    │   │   └── main.yml
+    │   ├── handlers
+    │   │   └── main.yml
+    │   └── tasks
+    │       └── main.yml
+    ├── oh_my_zsh
+    │   ├── defaults
+    │   │   └── main.yml
+    │   └── tasks
+    │       └── main.yml
+    ├── packages_optional
+    │   ├── defaults
+    │   │   └── main.yml
+    │   └── tasks
+    │       └── main.yml
+    └── update_system
+        └── tasks
+            └── main.yml
 ```
 
 ## 🌍 Roadmap
@@ -130,12 +137,6 @@ O playbook automatiza as seguintes configurações e instalações essenciais pa
 
 
 > Todas as etapas são opcionais e podem ser customizadas conforme a necessidade do usuário, garantindo flexibilidade e padronização do ambiente.
-
-### 🎛️ Personalização via [`group_vars/all.yml`](group_vars/all.yml)
-
-Você pode controlar quais etapas do playbook serão executadas editando o arquivo. Para cada seção, há variáveis booleanas (`true` ou `false`) que ativam ou desativam a instalação/configuração correspondente. Basta definir como `true` para habilitar ou `false` para pular aquela etapa.
-
-Assim, você tem total controle sobre o que será instalado no seu ambiente.
 
 ## 📋 Pré-requisitos
 
@@ -227,7 +228,7 @@ ansible-galaxy collection install -r collections/requirements.yml
 Para executar o playbook:
 
 ```bash
-ansible-playbook site.yml --ask-become-pass
+ansible-playbook playbooks/site.yml
 ```
 
 > **OBS: A senha é do seu usuário root**
@@ -239,6 +240,20 @@ Após a execução:
 
 O script exibirá um relatório com o status dos principais componentes instalados pelo playbook.
 
+## 🎛️ Personalização de Instalação
+
+Você tem controle total sobre o que é instalado. Edite o arquivo `inventory/group_vars/all.yml` e defina como `true` ou `false` cada uma das seções para ativar ou desativar a role correspondente.
+
+```YAML
+setup:
+    update_system: true
+    packages_optional: true
+    oh_my_zsh: true
+    docker_container: true
+    kubernetes_orchestration: true
+    iac: true
+```
+
 ## 🔄 Desfazendo as Alterações
 
 Caso precise reverter as configurações aplicadas pelo playbook, utilize o script de rollback fornecido no projeto. Ele tentará desfazer todas as alterações realizadas durante a instalação, independentemente de quais componentes foram instalados originalmente.
@@ -246,7 +261,7 @@ Caso precise reverter as configurações aplicadas pelo playbook, utilize o scri
 ### 1. Execute o playbook de reversão
 
 ```bash
-ansible-playbook rollback.yml --ask-become-pass
+ansible-playbook playbooks/rollback.yml
 ```
 
 > **Nota:** O rollback executa a remoção de todos os componentes gerenciados pelo playbook, mesmo que alguns não tenham sido instalados. Isso não causa problemas, pois o Ansible ignora etapas de remoção para itens ausentes.
