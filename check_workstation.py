@@ -105,6 +105,12 @@ def main():
     resultados_finais.append(verificar("Chave GPG 1 do OpenTofu", 'caminho', '/etc/apt/keyrings/opentofu.gpg', condicao))
     resultados_finais.append(verificar("Chave GPG 2 do OpenTofu", 'caminho', '/etc/apt/keyrings/opentofu-repo.gpg', condicao))
 
+    # 6. Ferramentas de Cloud CLI
+    resultados_finais.append(verificar("Comando 'az' (Azure CLI)", 'comando', 'az', condicao))
+    resultados_finais.append(verificar("Comando 'aws' (AWS CLI)", 'comando', 'aws', condicao))
+    resultados_finais.append(verificar("Comando 'gcloud' (Google Cloud CLI)", 'comando', 'gcloud', condicao))
+    resultados_finais.append(verificar("Repositório do Google Cloud", 'caminho', '/etc/apt/sources.list.d/google-cloud-sdk.list', condicao))
+
     exibir_relatorio(titulo, resultados_finais)
 
 if __name__ == "__main__":
