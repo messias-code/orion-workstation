@@ -24,19 +24,22 @@
   hosts: localhost
   connection: local
 
-  vars_files:
-    - "roles/packages_optional/defaults/main.yml"
-    - "roles/oh_my_zsh/defaults/main.yml"
-    - "roles/docker_container/defaults/main.yml"
-    - "roles/kubernetes_orchestration/defaults/main.yml"
-    - "roles/iac/defaults/main.yml"
-
   pre_tasks:
     - name: "SETUP | Recolhe factos sobre os serviços do sistema"
       become: true
       ansible.builtin.service_facts:
 
   tasks:
+    - name: "SETUP | Carrega as variáveis das roles para o rollback"
+      ansible.builtin.include_vars: "{{ item }}"
+      loop:
+        - "../roles/packages_optional/defaults/main.yml"
+        - "../roles/oh_my_zsh/defaults/main.yml"
+        - "../roles/docker_container/defaults/main.yml"
+        - "../roles/kubernetes_orchestration/defaults/main.yml"
+        - "../roles/iac/defaults/main.yml"
+        - "../roles/cloud_cli/defaults/main.yml"
+
     - name: "SEGURANCA | Muda o shell padrão para BASH"
       become: true
       ansible.builtin.user:
@@ -138,6 +141,27 @@
             state: absent
           loop: "{{ iac_paths_to_remove }}"
 
+      ignore_errors: true
+
+    - name: "CLOUD CLI | Reverte a instalação completa do ecossistema"
+      block:
+        - name: "CLOUD CLI | Remove os pacotes (Azure e Google)"
+          become: true
+          ansible.builtin.apt:
+            name:
+              - azure-cli
+              - google-cloud-sdk
+              - google-cloud-cli
+            state: absent
+            purge: true
+
+        - name: "CLOUD CLI | Remove binários e configurações (AWS)"
+          become: true
+          ansible.builtin.file:
+            path: "{{ item }}"
+            state: absent
+          loop: "{{ cloud_cli_paths_to_remove }}"
+          
       ignore_errors: true
 
     - name: "CLEANUP | Remove pacotes não utilizados e limpa o cache do APT"
