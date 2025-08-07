@@ -1,0 +1,96 @@
+---
+# Esta tarefa Ansible instala as ferramentas de linha de comando (CLI)
+# para os principais provedores de nuvem: Microsoft Azure, Amazon Web Services (AWS) e Google Cloud Platform (GCP).
+#
+# Tarefas:
+# - "Instalação da Azure CLI":
+#     Utiliza o script de instalação oficial da Microsoft para uma configuração rápida.
+# - "Instalação da AWS CLI v2":
+#     Baixa o bundle oficial, descompacta e o instala no sistema.
+# - "Instalação da Google Cloud CLI":
+#     Adiciona o repositório APT oficial do Google e instala o SDK.
+#
+# Todas as tarefas são idempotentes, verificando se a ferramenta já existe
+# antes de tentar a instalação, e utilizam privilégio de superusuário (become: true) quando necessário.
+
+- name: "AZURE | Verificar se a Azure CLI já está instalada"
+  ansible.builtin.stat:
+    path: /usr/bin/az
+  register: az_cli_check
+
+- name: "AZURE | Instalar a Azure CLI via script oficial"
+  become: true
+  ansible.builtin.shell:
+    cmd: "curl -sL https://aka.ms/InstallAzureCLIDeb | bash"
+  when: not az_cli_check.stat.exists
+
+- name: "AWS | Verificar se a AWS CLI já está instalada"
+  ansible.builtin.command:
+    cmd: "aws --version"
+  register: aws_cli_check
+  failed_when: false
+  changed_when: false
+
+- name: "AWS | Instalar a AWS CLI"
+  when: "'aws-cli' not in aws_cli_check.stdout"
+  block:
+    - name: "AWS | Baixar o instalador da AWS CLI"
+      ansible.builtin.get_url:
+        url: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+        dest: "/tmp/awscliv2.zip"
+        mode: "0644"
+
+    - name: "AWS | Descompactar o instalador"
+      ansible.builtin.unarchive:
+        src: "/tmp/awscliv2.zip"
+        dest: "/tmp"
+        remote_src: yes
+        creates: /tmp/aws # Evita descompactar novamente se o diretório já existe
+
+    - name: "AWS | Executar o instalador da AWS CLI"
+      become: true
+      ansible.builtin.command:
+        cmd: "/tmp/aws/install --update"
+      # O --update garante que se uma versão antiga estiver presente, ela será atualizada.
+
+- name: "GCP | Verificar se a Google Cloud CLI já está instalada"
+  ansible.builtin.stat:
+    path: /usr/bin/gcloud
+  register: gcloud_cli_check
+
+- name: "GCP | Instalar a Google Cloud CLI (método de módulos)"
+  when: not gcloud_cli_check.stat.exists
+  become: true
+  block:
+    - name: "GCP | Instalar pré-requisitos"
+      ansible.builtin.apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - gnupg
+          - curl
+        state: present
+
+    - name: "GCP | Baixar a chave GPG do Google Cloud (formato de texto)"
+      ansible.builtin.get_url:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        dest: /tmp/google-cloud.asc
+        mode: '0644'
+
+    - name: "GCP | Converter a chave GPG para o formato binário"
+      ansible.builtin.command:
+        cmd: gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg /tmp/google-cloud.asc
+      args:
+        creates: /usr/share/keyrings/cloud.google.gpg # Não executa se a chave já existir
+
+    - name: "GCP | Adicionar o repositório do Google Cloud"
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main"
+        state: present
+        filename: google-cloud-sdk
+
+    - name: "GCP | Instalar os pacotes do Google Cloud SDK"
+      ansible.builtin.apt:
+        name: google-cloud-sdk
+        state: present
+        update_cache: yes

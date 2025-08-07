@@ -1,0 +1,16 @@
+---
+# Este arquivo define as variáveis padrão para a role de Cloud CLIs.
+#
+# cloud_cli_paths_to_remove:
+#   Define uma lista de arquivos, binários e diretórios de configuração
+#   que serão removidos durante o processo de rollback para garantir uma limpeza completa.
+
+cloud_cli_paths_to_remove:
+  # AWS CLI
+  - /usr/local/bin/aws
+  - /usr/local/aws-cli
+  - /tmp/awscliv2.zip
+  - /tmp/aws
+  # Google Cloud CLI
+  - /etc/apt/sources.list.d/google-cloud-sdk.list
+  - /usr/share/keyrings/cloud.google.gpg
