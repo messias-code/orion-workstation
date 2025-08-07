@@ -16,3 +16,5 @@ setup:
   kubernetes_orchestration: true
   # --- Instalação das ferramentas de Infraestrutura como Código (IaC) ---
   iac: true
+  # --- Instalação das ferramentas de CLI de Nuvem ---
+  cloud_cli: true
