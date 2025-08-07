@@ -29,66 +29,67 @@ _**Feito com ❤️ para otimizar o tempo de desenvolvedores DevOps**_
 
 ## 🚀 Sobre o Projeto
 
-O **Orion Workstation** é um conjunto de automações para provisionar rapidamente um ambiente de desenvolvimento DevOps completo no WSL2 Ubuntu, utilizando Ansible. O objetivo é padronizar e acelerar a configuração de ferramentas essenciais, shells modernos, utilitários, servidores, bancos de dados, ferramentas de containerização, infraestrutura como código e monitoramento, tudo de forma modular e personalizável.
+O *Orion Workstation* é um conjunto de automações para provisionar rapidamente um ambiente de desenvolvimento DevOps completo no WSL2 Ubuntu, utilizando Ansible. O objetivo é padronizar e acelerar a configuração de ferramentas essenciais, shells modernos, utilitários, ferramentas de containerização, infraestrutura como código e CLIs de nuvem, tudo de forma modular e personalizável.
 
 Com este projeto, profissionais DevOps podem economizar tempo, evitar configurações manuais repetitivas e garantir ambientes consistentes entre diferentes máquinas e equipes. Cada etapa do setup pode ser ativada ou desativada conforme a necessidade, tornando o processo flexível e adaptável a diferentes cenários de uso.
-
-A documentação detalha cada funcionalidade, pré-requisitos e instruções para instalação, uso e personalização, facilitando a adoção tanto por iniciantes quanto por usuários avançados.
 
 ## 📁 Estrutura do Projeto
 
 ```
 .
-├── LICENSE
-├── README.md
-├── anotações.txt
-├── ansible.cfg
-├── assets
-│   ├── CodeVerso-Academy.jpg
-│   └── Orion-Workstation-Project.jpg
-├── check_workstation.py
-├── collections
-│   └── requirements.yml
-├── inventory
-│   ├── group_vars
-│   │   ├── all.yml
-│   │   └── vault.yml
-│   └── wsl.yml
-├── playbooks
-│   ├── rollback.yml
-│   └── site.yml
-└── roles
-    ├── docker_container
-    │   ├── defaults
+├── LICENSE                          # Licença do projeto (MIT)
+├── README.md                        # Documentação principal do projeto
+├── ansible.cfg                      # Arquivo de configuração do Ansible
+├── assets                           # Diretório para imagens e recursos visuais
+│   ├── CodeVerso-Academy.jpg        # Logo da CodeVerso Academy
+│   └── Orion-Workstation-Project.jpg # Logo do projeto Orion Workstation
+├── check_workstation.py             # Script Python para verificar a instalação/rollback
+├── collections                      # Definições de dependências de collections do Ansible
+│   └── requirements.yml             # Lista de collections necessárias (ex: kubernetes.core)
+├── inventory                        # Inventário do Ansible, define os hosts e variáveis
+│   ├── group_vars                   # Variáveis aplicadas a grupos de hosts
+│   │   └── all.yml                  # Variáveis globais para controlar a execução das roles
+│   └── wsl.yml                      # Definição do host (localhost para WSL2)
+├── playbooks                        # Playbooks principais para execução
+│   ├── rollback.yml                 # Playbook para reverter todas as alterações
+│   └── site.yml                     # Playbook principal que executa a configuração completa
+└── roles                            # Diretório onde as roles de automação são armazenadas
+    ├── cloud_cli                    # Role para instalar CLIs de provedores de nuvem (AWS, Azure, GCP)
+    │   ├── defaults                 # Variáveis padrão para a role cloud_cli
     │   │   └── main.yml
-    │   ├── handlers
-    │   │   └── main.yml
-    │   └── tasks
+    │   └── tasks                    # Tarefas de instalação das CLIs
     │       └── main.yml
-    ├── iac
-    │   ├── defaults
+    ├── docker_container             # Role para instalar e configurar o Docker
+    │   ├── defaults                 # Variáveis padrão para a role docker_container
     │   │   └── main.yml
-    │   └── tasks
+    │   ├── handlers                 # Handlers para reiniciar serviços (ex: Docker)
+    │   │   └── main.yml
+    │   └── tasks                    # Tarefas de instalação do Docker
     │       └── main.yml
-    ├── kubernetes_orchestration
-    │   ├── defaults
+    ├── iac                          # Role para instalar ferramentas de Infra as Code (Terraform, OpenTofu)
+    │   ├── defaults                 # Variáveis padrão para a role iac
     │   │   └── main.yml
-    │   ├── handlers
-    │   │   └── main.yml
-    │   └── tasks
+    │   └── tasks                    # Tarefas de instalação do Terraform e OpenTofu
     │       └── main.yml
-    ├── oh_my_zsh
-    │   ├── defaults
+    ├── kubernetes_orchestration     # Role para instalar o ecossistema Kubernetes
+    │   ├── defaults                 # Variáveis padrão para a role kubernetes_orchestration
     │   │   └── main.yml
-    │   └── tasks
-    │       └── main.yml
-    ├── packages_optional
-    │   ├── defaults
+    │   ├── handlers                 # Handlers para reiniciar serviços (ex: containerd)
     │   │   └── main.yml
-    │   └── tasks
+    │   └── tasks                    # Tarefas de instalação do Kubernetes, Helm, etc.
     │       └── main.yml
-    └── update_system
-        └── tasks
+    ├── oh_my_zsh                    # Role para configurar o Zsh com Oh My Zsh
+    │   ├── defaults                 # Variáveis padrão para a role oh_my_zsh
+    │   │   └── main.yml
+    │   └── tasks                    # Tarefas de instalação do Zsh e plugins
+    │       └── main.yml
+    ├── packages_optional            # Role para instalar pacotes opcionais do sistema
+    │   ├── defaults                 # Variáveis padrão para a role packages_optional
+    │   │   └── main.yml
+    │   └── tasks                    # Tarefas de instalação dos pacotes
+    │       └── main.yml
+    └── update_system                # Role para atualizar o sistema operacional
+        └── tasks                    # Tarefas de atualização e upgrade do sistema
             └── main.yml
 ```
 
@@ -102,9 +103,9 @@ Este projeto está em constante evolução para oferecer um ambiente DevOps cada
 - [x] Containerização: Docker Engine e Docker Compose v2
 - [x] Orquestração e Ferramentas Kubernetes: `kubectl`, `kubelet`, `kubeadm`, `minikube`, `helm`, `k9s`
 - [x] Infraestrutura como Código: `Terraform` e `OpenTofu`
-- [ ] CLIs de Nuvem: `Azure CLI`, `AWS CLI`, `Google Cloud CLI`
+- [x] CLIs de Nuvem: `Azure CLI`, `AWS CLI`, `Google Cloud CLI`
 
-> 🔄 *Este projeto está em desenvolvimento ativo. Novas funcionalidades e melhorias são adicionadas regularmente. Contribuições e sugestões são bem-vindas!*
+> 🔄 *Este projeto está em manutenção ativa. Correções de bugs e atualizações de segurança continuarão a ser feitas, melhorias são adicionadas regularmente, mas novas funcionalidades não estão planejadas.Contribuições e sugestões são bem-vindas!*
 
 ## 💡 Funcionalidades
 
@@ -132,7 +133,7 @@ O playbook automatiza as seguintes configurações e instalações essenciais pa
 6. **Infraestrutura como Código**
     - Instalação do Terraform e OpenTofu
 
-7. **Ferramentas de Cloud CLI** _(em desenvolvimento)_
+7. **Ferramentas de Cloud CLI**
     - Instalação do AWS CLI, Azure CLI e Google Cloud CLI
 
 
@@ -252,6 +253,7 @@ setup:
     docker_container: true
     kubernetes_orchestration: true
     iac: true
+    cloud_cli: true
 ```
 
 ## 🔄 Desfazendo as Alterações
