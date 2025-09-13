@@ -1,0 +1,30 @@
+# ~/.warp/themes/Meu_Catppuccin_Mocha.yml
+# Adaptação do tema Catppuccin Mocha para o formato do Warp
+
+name: "Catppuccin Mocha (Adaptado)"
+accent: "#89B4FA" # Cor de destaque na interface, usei o azul do seu tema
+background: "#1E1E2E"
+foreground: "#CDD6F4"
+details: "lighter" # Para ícones e outros detalhes da interface
+cursor: "#F5E0DC"
+selection: "#585B70"
+
+terminal_colors:
+  normal:
+    black: "#45475A"
+    red: "#F38BA8"
+    green: "#A6E3A1"
+    yellow: "#F9E2AF"
+    blue: "#89B4FA"
+    magenta: "#F5C2E7" # No seu arquivo era "purple"
+    cyan: "#94E2D5"
+    white: "#BAC2DE"
+  bright:
+    black: "#585B70"
+    red: "#F38BA8"
+    green: "#A6E3A1"
+    yellow: "#F9E2AF"
+    blue: "#89B4FA"
+    magenta: "#F5C2E7" # No seu arquivo era "brightPurple"
+    cyan: "#94E2D5"
+    white: "#A6ADC8"
