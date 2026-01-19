@@ -51,7 +51,7 @@
     repo: "https://github.com/romkatv/powerlevel10k.git"
     dest: "/home/{{ ansible_user_id }}/.oh-my-zsh/custom/themes/powerlevel10k"
     depth: 1
-  when: not p10k_stat.stat.exists and "'powerlevel10k' in zsh_theme_name"
+  when: not p10k_stat.stat.exists and 'powerlevel10k' in zsh_theme_name
 
 - name: ZSH | Define o tema no .zshrc
   ansible.builtin.lineinfile:
