@@ -229,7 +229,7 @@ ansible-galaxy collection install -r collections/requirements.yml
 Para executar o playbook:
 
 ```bash
-ansible-playbook playbooks/site.yml
+ansible-playbook playbooks/site.yml --ask-become-pass
 ```
 
 > **OBS: A senha é do seu usuário root**
