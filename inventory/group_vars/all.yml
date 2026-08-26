@@ -11,10 +11,10 @@ setup:
   # --- Instalação do oh-my-zsh ---
   oh_my_zsh: true
   # --- Configuração e instalação do Docker ---
-  docker_container: true
+  docker_container: false
   # --- Instalação do Kubernetes ---
-  kubernetes_orchestration: true
+  kubernetes_orchestration: false
   # --- Instalação das ferramentas de Infraestrutura como Código (IaC) ---
-  iac: true
+  iac: false
   # --- Instalação das ferramentas de CLI de Nuvem ---
-  cloud_cli: true
+  cloud_cli: false

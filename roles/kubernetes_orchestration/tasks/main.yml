@@ -124,10 +124,13 @@
 
 - name: "KUBERNETES | Adicionar repositório APT do Kubernetes"
   become: true
-  ansible.builtin.apt_repository:
-    repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_version }}/deb/ /"
+  ansible.builtin.deb822_repository:
+    name: kubernetes
+    types: deb
+    signed_by: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+    uris: "https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_version }}/deb/"
+    suites: /
     state: present
-    filename: kubernetes
 
 - name: "KUBERNETES | Instalar pacotes Kubernetes"
   become: true

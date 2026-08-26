@@ -84,10 +84,14 @@
         creates: /usr/share/keyrings/cloud.google.gpg # Não executa se a chave já existir
 
     - name: "GCP | Adicionar o repositório do Google Cloud"
-      ansible.builtin.apt_repository:
-        repo: "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main"
+      ansible.builtin.deb822_repository:
+        name: google-cloud-sdk
+        types: deb
+        signed_by: /usr/share/keyrings/cloud.google.gpg
+        uris: https://packages.cloud.google.com/apt
+        suites: cloud-sdk
+        components: main
         state: present
-        filename: google-cloud-sdk
 
     - name: "GCP | Instalar os pacotes do Google Cloud SDK"
       ansible.builtin.apt:

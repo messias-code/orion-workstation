@@ -53,10 +53,15 @@
 
 - name: "DOCKER | Adiciona o repositório do Docker"
   become: true
-  ansible.builtin.apt_repository:
-    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+  ansible.builtin.deb822_repository:
+    name: docker
+    types: deb
+    architectures: amd64
+    signed_by: /etc/apt/keyrings/docker.gpg
+    uris: https://download.docker.com/linux/ubuntu
+    suites: "{{ ansible_distribution_release }}"
+    components: stable
     state: present
-    filename: docker
 
 - name: "DOCKER | Instala os pacotes do Docker e suas dependências"
   become: true
