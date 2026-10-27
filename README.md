@@ -19,6 +19,7 @@ _**Feito com ❤️ para otimizar o tempo de desenvolvedores DevOps**_
 - [Pré-requisitos](#-pré-requisitos)
 - [Instalação](#-instalação)
 - [Configuração do Windows Terminal](#️-configuração-do-windows-terminal)
+- [Configuração do Prompt (Powerlevel10k)](#-configuração-do-prompt-powerlevel10k)
 - [Uso](#-uso)
 - [Personalização de Instalação](#️-personalização-de-instalação)
 - [Desfazendo as Alterações](#-desfazendo-as-alterações)
@@ -224,6 +225,38 @@ ansible-galaxy collection install -r collections/requirements.yml
     ```
     - No seu perfil do Ubuntu, defina o esquema de cores como "Catppuccin Mocha"
 
+## 🎨 Configuração do Prompt (Powerlevel10k)
+
+O prompt do terminal é gerenciado pelo [Powerlevel10k](https://github.com/romkatv/powerlevel10k). As preferências ficam salvas no arquivo `~/.p10k.zsh`.
+
+### Configurar
+
+O assistente de configuração é iniciado automaticamente na primeira execução do ZSH. Para executá-lo manualmente a qualquer momento:
+
+```bash
+p10k configure
+```
+
+Siga as perguntas do assistente (ícones, estilo do prompt, cores, etc.). Ao final, escolha salvar para gravar as alterações no `~/.zshrc` e no `~/.p10k.zsh`.
+
+> **Dica:** Se os ícones aparecerem quebrados, confira se a fonte `MesloLGS NF` está configurada no [Windows Terminal](#️-configuração-do-windows-terminal).
+
+### Resetar
+
+Para descartar a configuração atual e começar do zero:
+
+```bash
+# Remover o arquivo de configuração atual do Powerlevel10k
+rm -f ~/.p10k.zsh
+
+# Recarregar o ZSH (o assistente será iniciado novamente)
+exec zsh
+```
+
+Caso o assistente não inicie automaticamente, execute `p10k configure` manualmente.
+
+> **Nota:** O `p10k configure` também cria um backup do `~/.zshrc` antes de alterá-lo. Se precisar, procure por arquivos `~/.zshrc.bak*`.
+
 ## 📦 Uso
 
 Para executar o playbook:
@@ -237,7 +270,7 @@ ansible-playbook playbooks/site.yml --ask-become-pass
 Após a execução:
 1. Certifique-se que a fonte está configurada no Windows Terminal [Configuração do Terminal](#️-configuração-do-windows-terminal)
 2. Reinicie o terminal para que as alterações tenham efeito
-3. Configure o tema Powerlevel10k na primeira execução do ZSH
+3. Configure o tema Powerlevel10k na primeira execução do ZSH ([Configuração do Prompt](#-configuração-do-prompt-powerlevel10k))
 
 O script exibirá um relatório com o status dos principais componentes instalados pelo playbook.
 
